@@ -31,6 +31,30 @@ A Java-based battle engine for our FINAL PROJECT
 - [ ] Sprite Integration for Characters
 - [ ] Sound Effects & Background Music (OPTIONAL)
 
+### 1. Atomic Commits
+* **Rule:** One commit = One specific change.
+* **Bad:** `git commit -m "fixed stuff and added gui"`
+* **Good:** `git commit -m "feat: added Fire element damage multiplier"`
+* **Why:** If a bug appears, it is much easier to find exactly which line of code caused it.
+
+### 2. The "Compile First" Rule
+* **Rule:** Never push code that doesn't run.
+* **Action:** Before you commit, right-click the project in **NetBeans** and select **Clean and Build**. If it fails, do not push!
+
+### 3. Package Integrity
+* **Rule:** Respect the folder structure.
+* **src/gui**: Only for Figma-to-Java swing/FX classes.
+* **src/engine**: Only for calculation logic.
+* **Why:** Misplaced files lead to `ClassNotFound` errors and broken imports.
+
+### 4. Meaningful Naming
+* **Rule:** No single-letter variables (except in loops).
+* **Bad:** `int d = 50;`
+* **Good:** `int baseDamage = 50;`
+* **Why:** Code should be readable like a book so we don't have to call each other at 3 AM to ask "What is `d`?"
+
+---
+
 ## WARNING!!!!
 - Do not tamper with the .gitignore without any prior notice!!!
 - If .gitignore is tampered, your merge request is DENIED!
