@@ -25,6 +25,7 @@ A Java-based battle engine for our mobile game prototype.
 ## 📝 TO-DO List (Task Board)
 - [x] Core Battle Logic (`DamageCalculator.java`)
 - [x] Elemental Advantage System (8 Elements)
+- [ ] Special Attributes of each Elements 
 - [ ] **GUI Implementation** (Main priority for contributors!)
 - [ ] Save/Load System for Player Progress
 - [ ] Sprite Integration for Characters
