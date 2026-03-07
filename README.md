@@ -1,5 +1,5 @@
-# Elemental Masters - Battle Simulator
-A Java-based battle engine for our mobile game prototype.
+# Elemental Masters - TURN BASED simple JAVA PROJECT using Java Ant in Apache Net Beans (version 28 and above)
+A Java-based battle engine for our FINAL PROJECT
 
 ## How to Run
 1. Open this project in **NetBeans**.
