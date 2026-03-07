@@ -16,6 +16,11 @@ bin/
 build/
 dist/
 nbproject/private/
+nbproject/*
+!nbproject/project.xml
+!nbproject/project.properties
+!nbproject/genfiles.properties
+!nbproject/build-impl.xml
 
 # --- NetBeans / IDE Specifics ---
 nbproject/
