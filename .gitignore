@@ -1,0 +1,34 @@
+# --- Compiled Files (The "Binaries") ---
+*.class
+*.exe
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# --- Scripts & Executables ---
+*.bat
+*.sh
+*.ps1
+*.cmd
+bin/
+build/
+dist/
+nbproject/private/
+
+# --- NetBeans / IDE Specifics ---
+nbproject/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.netbeans.derby/
+
+# --- OS Specifics (Hidden Junk) ---
+.DS_Store
+Thumbs.db
+
+# --- Logs and Temporary Files ---
+*.log
+tmp/
+temp/
