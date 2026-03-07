@@ -16,7 +16,9 @@ bin/
 build/
 dist/
 nbproject/private/
+
 nbproject/*
+
 !nbproject/project.xml
 !nbproject/project.properties
 !nbproject/genfiles.properties
