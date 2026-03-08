@@ -1,6 +1,14 @@
 # Elemental Masters - TURN BASED simple JAVA PROJECT using Java Ant in Apache Net Beans (version 28 and above)
 A Java-based battle engine for our FINAL PROJECT
 
+## Getting Started
+
+Before contributing, please read our [Development Workflow](WORKFLOW.md) .
+
+### ⚠️ MANDATORY: All team members must follow the protocols defined in WORKFLOW.md to ensure code stability and prevent merge conflicts. Please review the "DO NOTs" section before submitting any Pull Requests.
+
+
+
 ## How to Run
 1. Open this project in **NetBeans**.
 2. Right-click the project and select **Run**.
