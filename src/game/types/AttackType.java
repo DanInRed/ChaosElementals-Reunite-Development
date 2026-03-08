@@ -13,8 +13,8 @@ public enum AttackType {
     ULTIMATE(2.0);
 
     private final double power;
-
-    AttackType(double power) {
+    
+    AttackType(double power) { //TODO implement mana usage in this class
         this.power = power;
     }
 

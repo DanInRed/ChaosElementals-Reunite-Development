@@ -9,7 +9,7 @@ package game.core;
 import game.types.AttackType;
 
 public class AttackTypeValidator {
-
+    
     /**
      * Converts a user-input integer into a valid ElementType.
      * @param index The attack Type chosen by the user (0-3).
@@ -24,7 +24,7 @@ public class AttackTypeValidator {
             case 3 -> AttackType.ULTIMATE;
             
             default -> AttackType.NORMAL; // Default fallback
-                //System.out.println("Your Input didnt match the allowed input! defaulted to Normal Attack");
         };
     }
+    
 }
