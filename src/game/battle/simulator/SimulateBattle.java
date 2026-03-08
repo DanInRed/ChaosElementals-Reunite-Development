@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.Random;
 import game.character.holder.CharacterHolder;
 import game.engine.DamageCalculator;
+import static game.engine.GameUtils.pause;
 import game.types.AttackType;
 import game.core.AttackTypeValidator;
 import game.core.InputValidator;
@@ -17,7 +18,7 @@ import game.types.*;
 
 public class SimulateBattle {
     private final Random rand = new Random();
-
+    private int round = 1;
     public void startBattle(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
         System.out.println("\n--- BATTLE START: " + player.getElementType() + " VS " + enemy.getElementType() + " ---");
 
@@ -34,10 +35,9 @@ public class SimulateBattle {
     }
 
     private void handlePlayerTurn(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
-        int round = 1;
         System.out.println("\n[ YOUR TURN - HP: " + player.getCurrentHealth() + " ]");
-        System.out.println("Round " + round + ": NORMAL | 1: SKILL_1 | 2: SKILL_2 | 3: ULTIMATE");
-        round++;
+        System.out.println("Round " + round + "| 0: NORMAL | 1: SKILL_1 | 2: SKILL_2 | 3: ULTIMATE");
+        
         int choice = InputValidator.getValidAttack("Select Attack: ", scanf);
         
         player.setAttackType(AttackTypeValidator.getAttackTypeByIndex(choice));
@@ -45,10 +45,17 @@ public class SimulateBattle {
         
         enemy.takeDamage(dmg);
         System.out.println("You used " + player.getAttackType() + "! Dealt: " + dmg);
+        pause(1500);
     }
 
     private void handleEnemyTurn(CharacterHolder enemy, CharacterHolder player) {
+        
         System.out.println("\n[ ENEMY TURN - HP: " + enemy.getCurrentHealth() + " ]");
+        
+        for(int i = 0; i < 3; i++){
+            pause(666);
+            System.out.print(".");
+        }
         
         // Randomly pick an attack for the enemy
         AttackType enemyMove = AttackType.values()[rand.nextInt(AttackType.values().length)];
@@ -56,6 +63,7 @@ public class SimulateBattle {
         
         player.takeDamage(dmg);
         System.out.println("Enemy used " + enemyMove + "! Dealt: " + dmg);
+        round++;
     }
     
     private String getWittyRemark(ElementType type, boolean playerWon) {
@@ -106,5 +114,6 @@ public class SimulateBattle {
             }
 
             System.out.println("=".repeat(60) + "\n");
+            round = 1;
         }
 }
