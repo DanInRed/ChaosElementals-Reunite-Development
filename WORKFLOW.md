@@ -1,6 +1,4 @@
----
-
-# WORKFLOW.md
+## WORKFLOW.md
 
 ### ⚠️ IMPORTANT: DO NOTs
 
