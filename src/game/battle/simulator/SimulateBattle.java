@@ -8,19 +8,23 @@ package game.battle.simulator; // or game.battle
 
 import java.util.Scanner;
 import java.util.Random;
+
 import game.character.holder.CharacterHolder;
-import game.engine.DamageCalculator;
+import game.engine.*; //DamageCalculator and ManaCostCalculator
 import static game.engine.GameUtils.pause;
-import game.types.AttackType;
+
 import game.core.AttackTypeValidator;
 import game.core.InputValidator;
 import game.types.*;
 
-public class SimulateBattle {
+
+public class SimulateBattle{
+     SimulateManaCost simulateManaCost; //TODO THIS IS THE CAUSE OF ERROR
     private final Random rand = new Random();
     private int round = 1;
+
     public void startBattle(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
-        System.out.println("\n--- BATTLE START: " + player.getElementType() + " VS " + enemy.getElementType() + " ---");
+        System.out.println("\n------------------------------------------ BATTLE START: " + player.getElementType() + " VS " + enemy.getElementType() + " ------------------------------------------");
 
         while (player.isAlive() && enemy.isAlive()) {
             // 1. PLAYER TURN
@@ -35,18 +39,39 @@ public class SimulateBattle {
     }
 
     private void handlePlayerTurn(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
-        System.out.println("\n[ YOUR TURN - HP: " + player.getCurrentHealth() + " ]");
-        System.out.println("Round " + round + "| 0: NORMAL | 1: SKILL_1 | 2: SKILL_2 | 3: ULTIMATE");
+        System.out.println("\n                                      [ YOUR TURN ]                                              ");
+        System.out.println("HP: " + player.getCurrentHealth()+ " | Mana: " + player.getCurrentMana());
+        System.out.println("Round " + round + "| 0: NORMAL (0MP) | 1: SKILL_1 (30MP) | 2: SKILL_2 (50MP) | 3: ULTIMATE (100MP)");
         
-        int choice = InputValidator.getValidAttack("Select Attack: ", scanf);
-        
-        player.setAttackType(AttackTypeValidator.getAttackTypeByIndex(choice));
-        double dmg = DamageCalculator.calculate(player, enemy, player.getAttackType());
+       
+        //Loop to check if attack is Valid!
+        int choice;
+
+        while(true){
+            choice = InputValidator.getValidAttack("Select Attack: ", scanf);
+            AttackType selectedAttack = AttackTypeValidator.getAttackTypeByIndex(choice);
+            
+            simulateManaCost = new SimulateManaCost(choice, player, selectedAttack);//TODO problematic method
+            
+            if(simulateManaCost.isChoiceValid(choice, player, selectedAttack)){
+                player.setAttackType(selectedAttack);
+                player.manaCost(simulateManaCost.getManaNeeded());
+                break;    
+            }else{
+                System.out.println("Calm Down! You're too ambitious.");
+                System.out.println("Mana Cost: " + simulateManaCost.getManaNeeded() + " | Current Mana: " + simulateManaCost.getCurrentMana()); 
+            }
+        }
+
+        //player.setAttackType(AttackTypeValidator.getAttackTypeByIndex(choice));
+        double dmg = DamageCalculator.calculateDamage(player, enemy, player.getAttackType());
         
         enemy.takeDamage(dmg);
         System.out.println("You used " + player.getAttackType() + "! Dealt: " + dmg);
         pause(1500);
     }
+
+
 
     private void handleEnemyTurn(CharacterHolder enemy, CharacterHolder player) {
         
@@ -59,7 +84,7 @@ public class SimulateBattle {
         
         // Randomly pick an attack for the enemy
         AttackType enemyMove = AttackType.values()[rand.nextInt(AttackType.values().length)];
-        double dmg = DamageCalculator.calculate(enemy, player, enemyMove);
+        double dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
         
         player.takeDamage(dmg);
         System.out.println("Enemy used " + enemyMove + "! Dealt: " + dmg);
@@ -67,7 +92,7 @@ public class SimulateBattle {
     }
     
     private String getWittyRemark(ElementType type, boolean playerWon) {
-    if (playerWon) {
+        if (playerWon) {
         return switch (type) {
             case FIRE -> "The heat was on, but you played it cool!";
             case ICE -> "Cool Story... too bad you're on thin ice now. Consider yourself defrosted :p";
@@ -79,7 +104,7 @@ public class SimulateBattle {
             case METAL -> "You really Headbanged that victory home!";
             default -> "Victory is yours! They never stood a chance.";
         };
-    } else {
+        } else {
         return switch (type) {
             case FIRE -> "You just got third-degree burned. Ouch.";
             case ICE -> "Is this frostbite? into the chill grave you go.";
@@ -92,7 +117,7 @@ public class SimulateBattle {
             default -> "Better luck next time, trainee!";
         };
     }
-}
+    }
     
         private void displayResult(CharacterHolder player, CharacterHolder enemy) {
             System.out.println("\n" + "=".repeat(60));
@@ -116,4 +141,6 @@ public class SimulateBattle {
             System.out.println("=".repeat(60) + "\n");
             round = 1;
         }
+
+
 }

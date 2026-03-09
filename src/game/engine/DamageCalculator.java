@@ -11,7 +11,7 @@ import game.character.holder.CharacterHolder;
 
 public class DamageCalculator {
 
-    public static double calculate(CharacterHolder attacker, CharacterHolder defender, AttackType move) {
+    public static double calculateDamage(CharacterHolder attacker, CharacterHolder defender, AttackType move) {
         // 1. Check for NORMAL attack logic first
         if (move == AttackType.NORMAL) {
             return attacker.getStats().getBaseDamage();
