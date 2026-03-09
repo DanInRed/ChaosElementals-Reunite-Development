@@ -16,6 +16,7 @@ public class SimulateManaCost {
         this.currentMana = player.getCurrentMana();
     }
 
+    //isChoiceValid needs another Clarification pls review the SimulateBattle.java
     public boolean isChoiceValid(int choice, CharacterHolder player, AttackType attack){
         boolean isValid;
         if(currentMana >= manaNeeded){
