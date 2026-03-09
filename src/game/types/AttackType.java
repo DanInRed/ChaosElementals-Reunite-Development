@@ -14,7 +14,7 @@ public enum AttackType {
 
     private final double power;
     
-    AttackType(double power) { //TODO implement mana usage in this class
+    AttackType(double power) {
         this.power = power;
     }
 

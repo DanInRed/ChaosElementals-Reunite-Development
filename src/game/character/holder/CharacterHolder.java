@@ -52,14 +52,14 @@ public class CharacterHolder {
     }
     
     public void manaCost(double amount){
-        this.mana.manaCost(amount);//TODO fix this Mana Cost Logic
+        this.mana.manaCost(amount);//fixed
     }
 
     public double getCurrentHealth(){
         return this.hp.getCurrentHP();
     }
     public double getCurrentMana(){
-        return this.mana.getCurrentMana(); //TODO fix the battle logic where skills require mana usage
+        return this.mana.getCurrentMana(); 
     }
     
     //only AttackType requires a setter for it needs to be updated every Turn!!!

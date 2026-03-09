@@ -15,7 +15,6 @@ public class ManaPoints {
         this.currentMana = maxMana;
     }
 
-    // TODO Make the skill cost mana and make sure every skill exept normal attack cost mana
     public void manaCost(double amount) {
         this.currentMana -= amount;
         if (this.currentMana < 0) {

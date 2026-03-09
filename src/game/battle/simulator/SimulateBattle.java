@@ -15,11 +15,13 @@ import static game.engine.GameUtils.pause;
 
 import game.core.AttackTypeValidator;
 import game.core.InputValidator;
+
+import game.battle.simulator.dialogues.BattleDialogues;
 import game.types.*;
 
 
 public class SimulateBattle{
-     SimulateManaCost simulateManaCost; //TODO THIS IS THE CAUSE OF ERROR
+     SimulateManaCost simulateManaCost; 
     private final Random rand = new Random();
     private int round = 1;
 
@@ -42,8 +44,7 @@ public class SimulateBattle{
         System.out.println("\n                                      [ YOUR TURN ]                                              ");
         System.out.println("HP: " + player.getCurrentHealth()+ " | Mana: " + player.getCurrentMana());
         System.out.println("Round " + round + "| 0: NORMAL (0MP) | 1: SKILL_1 (30MP) | 2: SKILL_2 (50MP) | 3: ULTIMATE (100MP)");
-        
-       
+
         //Loop to check if attack is Valid!
         int choice;
 
@@ -51,8 +52,7 @@ public class SimulateBattle{
             choice = InputValidator.getValidAttack("Select Attack: ", scanf);
             AttackType selectedAttack = AttackTypeValidator.getAttackTypeByIndex(choice);
             
-            simulateManaCost = new SimulateManaCost(choice, player, selectedAttack);//TODO problematic method
-            
+            simulateManaCost = new SimulateManaCost(choice, player, selectedAttack);//fixed            
             if(simulateManaCost.isChoiceValid(choice, player, selectedAttack)){
                 player.setAttackType(selectedAttack);
                 player.manaCost(simulateManaCost.getManaNeeded());
@@ -71,8 +71,6 @@ public class SimulateBattle{
         pause(1500);
     }
 
-
-
     private void handleEnemyTurn(CharacterHolder enemy, CharacterHolder player) {
         
         System.out.println("\n[ ENEMY TURN - HP: " + enemy.getCurrentHealth() + " ]");
@@ -90,34 +88,7 @@ public class SimulateBattle{
         System.out.println("Enemy used " + enemyMove + "! Dealt: " + dmg);
         round++;
     }
-    
-    private String getWittyRemark(ElementType type, boolean playerWon) {
-        if (playerWon) {
-        return switch (type) {
-            case FIRE -> "The heat was on, but you played it cool!";
-            case ICE -> "Cool Story... too bad you're on thin ice now. Consider yourself defrosted :p";
-            case PLANT -> "Oh no you poor thing, Uprooted!";
-            case ROCK -> "You were a boulder, but I was the Jack Hammer.";
-            case ELECTRIC -> "The riff guy got Amped!";
-            case WATER -> "You soaked up the win and left them high and dry!";
-            case WIND -> "Is that it? The 'legendary gale' was barely a light breeze.";
-            case METAL -> "You really Headbanged that victory home!";
-            default -> "Victory is yours! They never stood a chance.";
-        };
-        } else {
-        return switch (type) {
-            case FIRE -> "You just got third-degree burned. Ouch.";
-            case ICE -> "Is this frostbite? into the chill grave you go.";
-            case PLANT -> "Yikes, post apocaliptic vegetation it is.";
-            case ROCK -> "Wait What? the golem launched a surprise attack? \nNo fair!";
-            case ELECTRIC -> "Oh well.. thunderstruck it is.";
-            case WATER -> "Don't worry, the salt water will preserve your pride. \nYour 'wave' was the most pathetic thing I saw all day.";
-            case WIND -> "You got blown away like a leaf in a storm.";
-            case METAL -> "Oops... poser detected!";
-            default -> "Better luck next time, trainee!";
-        };
-    }
-    }
+    //WittyRemarks are moved to BattleDialogues.java file        
     
         private void displayResult(CharacterHolder player, CharacterHolder enemy) {
             System.out.println("\n" + "=".repeat(60));
@@ -126,7 +97,7 @@ public class SimulateBattle{
 
             boolean playerWon = player.isAlive();
             // Get the witty remark based on the enemy's element and the result
-            String remark = getWittyRemark(enemy.getElementType(), playerWon);
+            String remark = BattleDialogues.getWittyRemark(enemy.getElementType(), playerWon);
 
             if (playerWon) {
                 System.out.println(" [!] VICTORY!");
