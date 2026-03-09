@@ -12,7 +12,6 @@ import game.character.holder.*;
 import java.util.Random;
 import game.elements.*;
 import static game.engine.GameUtils.pause;
-import game.character.stats.*;
 
 public class TestingElementalMaster {
     public static void main(String[] args) {
