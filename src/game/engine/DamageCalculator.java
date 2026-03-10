@@ -28,7 +28,9 @@ public class DamageCalculator {
         if (distance == 1 || distance == 2) {
             elementMult = 1.5;      // Strong
         } else if (distance == 7 || distance == 6) {
-            elementMult = 0.5;      // Weak
+            if(move != AttackType.ULTIMATE){  
+                elementMult = 0.5; //Weak if not Ultimate
+            }
         }
 
         // 4. Attack Type Multiplier

@@ -45,12 +45,14 @@ public class TestingElementalMaster {
         System.out.println("Wow an enemy appeared? We just started.\n");
         System.out.println("Oh well, Here's your options. ");
         
+        pause(1500);
+        System.out.println("Elements List: \n0.Fire, \n1.Ice, \n2.Plant, \n3.Rock, \n4.Electric, \n5.Water, \n6.Wind, \n7.Metal");
         pause(1500); // this acts as a timer to slow down the terminal
         
         System.out.println("HINT: Try using " + ElementValidator.getElementFromIndex(bestCounter1) + 
                    " or " + ElementValidator.getElementFromIndex(bestCounter2) + "!");
-        pause(1500);
-        System.out.println("Elements List: \n0.Fire, \n1.Ice, \n2.Plant, \n3.Rock, \n4.Electric, \n5.Water, \n6.Wind, \n7.Metal");
+
+
         int playerChoice = InputValidator.getValidElement("Choose your element to counter " + enemy.getName() + ": ", scanf);
         Element playerType = ElementValidator.getElementObject(playerChoice);
         CharacterHolder player = new CharacterHolder(playerType);
