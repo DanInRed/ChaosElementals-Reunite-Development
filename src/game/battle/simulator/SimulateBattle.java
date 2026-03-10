@@ -32,7 +32,6 @@ public class SimulateBattle{
             // 1. PLAYER TURN
             handlePlayerTurn(player, enemy, scanf);
             if (!enemy.isAlive()) break;
-
             // 2. ENEMY TURN
             handleEnemyTurn(enemy, player);
         }
@@ -41,7 +40,7 @@ public class SimulateBattle{
     }
 
     private void handlePlayerTurn(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
-        System.out.println("\n                                      [ YOUR TURN ]                                              ");
+        System.out.println("\n\t\t\t\t[ YOUR TURN ]");
         System.out.println("HP: " + player.getCurrentHealth()+ " | Mana: " + player.getCurrentMana());
         System.out.println("Round " + round + "| 0: NORMAL (0MP) | 1: SKILL_1 (30MP) | 2: SKILL_2 (50MP) | 3: ULTIMATE (100MP)");
 
@@ -73,16 +72,40 @@ public class SimulateBattle{
 
     private void handleEnemyTurn(CharacterHolder enemy, CharacterHolder player) {
         
-        System.out.println("\n[ ENEMY TURN - HP: " + enemy.getCurrentHealth() + " ]");
-        
+        System.out.println("\n\t\t\t[ ENEMY TURN ]");
+        System.out.println("HP: " + enemy.getCurrentHealth()+ " | Mana: " + enemy.getCurrentMana());
         for(int i = 0; i < 3; i++){
             pause(666);
             System.out.print(".");
         }
         
         // Randomly pick an attack for the enemy
-        AttackType enemyMove = AttackType.values()[rand.nextInt(AttackType.values().length)];
-        double dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
+        
+        int choice;
+        AttackType enemyMove;
+        double dmg;
+        boolean isSweating = false;
+        
+        //enemy can now utilize mana usage
+        while(true){
+            choice = rand.nextInt(AttackType.values().length);
+            enemyMove = AttackType.values()[choice];
+        
+            simulateManaCost = new SimulateManaCost(choice, enemy, enemyMove);
+            dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
+                if(simulateManaCost.isChoiceValid(choice, enemy, enemyMove)){
+                    enemy.setAttackType(enemyMove);
+                    enemy.manaCost(simulateManaCost.getManaNeeded());
+                    isSweating = false;
+                    break;
+                }else{
+                    if(isSweating != true){
+                        System.out.println(enemy.getName() + " is Sweating!");
+                        System.out.println("Reconsiders using another Skill...");
+                    }
+                    isSweating = true;
+                }
+        }
         
         player.takeDamage(dmg);
         System.out.println("Enemy used " + enemyMove + "! Dealt: " + dmg);
