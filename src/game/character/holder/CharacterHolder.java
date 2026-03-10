@@ -61,7 +61,10 @@ public class CharacterHolder {
     public double getCurrentMana(){
         return this.mana.getCurrentMana(); 
     }
-    
+    public double getRegenRate() { 
+        return this.mana.getRegenRate();
+    }
+
     //only AttackType requires a setter for it needs to be updated every Turn!!!
     public void setAttackType(AttackType attackType){
         this.attackType = attackType;

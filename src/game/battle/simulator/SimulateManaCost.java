@@ -19,7 +19,7 @@ public class SimulateManaCost {
     //isChoiceValid needs another Clarification pls review the SimulateBattle.java
     public boolean isChoiceValid(int choice, CharacterHolder player, AttackType attack){
         boolean isValid;
-        if(currentMana >= manaNeeded){
+        if((int)currentMana >= (int)manaNeeded){ // the int typecast acts as a shield for future special attributes element who utilizes +25% mana regen
             isValid = true;
         }else{
             isValid = false;
