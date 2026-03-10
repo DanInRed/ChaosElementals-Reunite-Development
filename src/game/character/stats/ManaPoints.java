@@ -6,8 +6,8 @@ public class ManaPoints {
     private double maxMana;
 
     public ManaPoints() {
-        this.maxMana = 300.0; // Default starting Mana
-        this.currentMana = 300.0;
+        this.maxMana = 150.0; // Default starting Mana
+        this.currentMana = 150.0; // MANA adjusted from 300 to 200
     }
 
     public ManaPoints(double maxMana) {
