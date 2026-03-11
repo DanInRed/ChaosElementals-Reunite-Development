@@ -28,19 +28,34 @@ public class LoadingPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblLoadingPanel = new javax.swing.JLabel();
+
+        setMaximumSize(new java.awt.Dimension(1920, 960));
+        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1280, 960));
+
+        lblLoadingPanel.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblLoadingPanel.setText("LOADING PANEL");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblLoadingPanel)
+                .addGap(0, 898, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblLoadingPanel)
+                .addGap(0, 896, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblLoadingPanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,11 @@
  */
 package game.ui.menu;
 
+import java.util.Random;
+//import game.battle.simulator.*;
+import game.character.holder.*;
+import game.core.ElementValidator;
+import game.elements.*;
 /**
  *
  * @author Dash
@@ -17,7 +22,19 @@ public class MenuPanel extends javax.swing.JPanel {
      */
     public MenuPanel() {
         initComponents();
-    }
+
+        // Example for the Start Button "Ghost" feedback
+        btnStart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Minimalist hover: Change text color to Blue
+                btnStart.setForeground(java.awt.Color.BLUE);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Reset to black
+                btnStart.setForeground(java.awt.Color.BLACK);
+            }
+    });
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,19 +45,145 @@ public class MenuPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblMenuPanel = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        btnStart = new javax.swing.JButton();
+        btnLeaderboard = new javax.swing.JButton();
+        btnSettings = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+
+        setMaximumSize(new java.awt.Dimension(1280, 960));
+        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 960));
+
+        lblMenuPanel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblMenuPanel.setText("MENU PANEL");
+
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblTitle.setText("CHAOS ELEMENTALS: REUNITE");
+
+        btnStart.setText("START");
+        btnStart.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnStart.setMinimumSize(new java.awt.Dimension(200, 50));
+        btnStart.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnStart.addActionListener(this::btnStartActionPerformed);
+
+        btnLeaderboard.setText("Leaderboard");
+        btnLeaderboard.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnLeaderboard.setMinimumSize(new java.awt.Dimension(200, 50));
+        btnLeaderboard.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnLeaderboard.addActionListener(this::btnLeaderboardActionPerformed);
+
+        btnSettings.setText("Settings");
+        btnSettings.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnSettings.setMinimumSize(new java.awt.Dimension(200, 50));
+        btnSettings.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnSettings.addActionListener(this::btnSettingsActionPerformed);
+
+        btnExit.setText("EXIT");
+        btnExit.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnExit.setMinimumSize(new java.awt.Dimension(200, 50));
+        btnExit.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnExit.addActionListener(this::btnExitActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblMenuPanel)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(397, Short.MAX_VALUE)
+                .addComponent(lblTitle)
+                .addGap(362, 362, 362))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLeaderboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblMenuPanel)
+                .addGap(148, 148, 148)
+                .addComponent(lblTitle)
+                .addGap(84, 84, 84)
+                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnLeaderboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 335, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+                // 1. GENERATE THE ENEMY (Logic moved from your Main)
+            Random rand = new Random();
+            int enemyChoice = rand.nextInt(8);
+            Element enemyType = ElementValidator.getElementObject(enemyChoice);
+            CharacterHolder enemy = new CharacterHolder(enemyType);
+
+            // 2. TRIGGER THE UI SWAP
+            game.ui.GameWindow topWindow = (game.ui.GameWindow) javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (topWindow != null) {
+                // We pass the 'enemy' to the BattlePanel constructor
+                topWindow.setView(new game.ui.battle.BattlePanel(enemy));
+            }   
+    }//GEN-LAST:event_btnStartActionPerformed
+
+    private void btnLeaderboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLeaderboardActionPerformed
+        //This is a hardcoded "dummyData" and its role is to be a placeholder before we use sql database 
+        String dummyData = "--- TOP ELEMENTAL MASTERS ---\n" +
+                       "1. ElectricWizard - 9999 pts\n" +
+                       "2. Crowbar - 8500 pts\n" +
+                       "3. AcidBath - 7200 pts\n" +
+                       "\n(Database connection pending...)";
+                       
+        javax.swing.JOptionPane.showMessageDialog(this, dummyData, "Leaderboard", javax.swing.JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_btnLeaderboardActionPerformed
+
+    private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
+        String[] options = {"Toggle Music", "Toggle SFX", "Done"};
+
+        int selection = javax.swing.JOptionPane.showOptionDialog(this, 
+                "Current Settings:\n" +
+                "Music: " + (game.ui.engine.SettingsManager.musicEnabled ? "ON" : "OFF") + "\n" +
+                "SFX: " + (game.ui.engine.SettingsManager.sfxEnabled ? "ON" : "OFF"), 
+                "Elemental Settings",
+                javax.swing.JOptionPane.DEFAULT_OPTION, 
+                javax.swing.JOptionPane.QUESTION_MESSAGE, 
+                null, options, options[2]);
+
+            if (selection == 0) { 
+                game.ui.engine.SettingsManager.toggleMusic(); // Calls the static method
+                btnSettingsActionPerformed(evt); // Recursion: re-opens the box to show the new "ON/OFF"
+            } else if (selection == 1) { 
+                game.ui.engine.SettingsManager.toggleSFX(); // Calls the static method
+                btnSettingsActionPerformed(evt); 
+            }
+    }//GEN-LAST:event_btnSettingsActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // Standard practice for closing a Java Desktop App
+        System.out.println("Closing Chaos Elementals...");
+        System.exit(0);
+    }//GEN-LAST:event_btnExitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLeaderboard;
+    private javax.swing.JButton btnSettings;
+    private javax.swing.JButton btnStart;
+    private javax.swing.JLabel lblMenuPanel;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 }

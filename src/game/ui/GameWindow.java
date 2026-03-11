@@ -6,6 +6,8 @@
  */
 package game.ui;
 
+import game.ui.menu.MenuPanel;
+import javax.swing.JFrame;
 /**
  *
  * @author Dash
@@ -18,7 +20,27 @@ public class GameWindow extends javax.swing.JFrame {
      * Creates new form GameWindow
      */
     public GameWindow() {
-        initComponents();
+        // 1. Let NetBeans build the basic frame
+            initComponents(); 
+
+            // 2. Set the starting view FIRST
+            setView(new game.ui.splash.SplashPanel());
+            pack();
+            // 3. THE FIX: Tell the Frame to grow to fit the Panel's 1020x680 size
+            // pack() calculates the Title Bar height and adds it automatically
+            //this.pack(); //i already have set the fixed size to 4:3 ration hardcoded 1280 * 960 
+
+            // 4. Center it AFTER packing (so it's centered based on the final size)
+            this.setLocationRelativeTo(null); 
+
+            // 5. Add your transition listener
+            this.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    setView(new MenuPanel()); 
+                    removeMouseListener(this);
+                }
+            });
     }
 
     /**
@@ -30,47 +52,48 @@ public class GameWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblTitle = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1280, 960));
+        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setResizable(false);
+
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(0, 0, 255));
+        lblTitle.setText("CHAOS ELEMENTALS - REUNITE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(349, Short.MAX_VALUE)
+                .addComponent(lblTitle)
+                .addGap(209, 209, 209))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(lblTitle)
+                .addContainerGap(646, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+    
+    
+        public void setView(javax.swing.JPanel newPanel) {
+            getContentPane().removeAll();
+            getContentPane().setLayout(new java.awt.BorderLayout());
+            getContentPane().add(newPanel, java.awt.BorderLayout.CENTER); // Add CENTER here
+            getContentPane().revalidate();
+            getContentPane().repaint();
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new GameWindow().setVisible(true));
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,5 +1,5 @@
 /*
- *  Project: TestingElementalMaster
+ *  Project: ChaosElementalsMain
  *  Author: Dash 
  *  Date: Mar 7, 2026
  */
@@ -11,10 +11,23 @@ import game.battle.simulator.*;
 import game.character.holder.*;
 import java.util.Random;
 import game.elements.*;
+import game.ui.GameWindow;
 import static game.engine.GameUtils.pause;
 
-public class TestingElementalMaster {
+public class ChaosElementalsMain {
     public static void main(String[] args) {
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            game.ui.GameWindow game = new game.ui.GameWindow();
+
+            // Start with SplashPanel
+            game.setView(new game.ui.splash.SplashPanel());
+
+            game.setVisible(true);
+            game.setLocationRelativeTo(null); 
+        });
+        
+        /*
         Scanner scanf = new Scanner(System.in);        
         
         System.out.println("---------------------------------Elemental Masters---------------------------------");
@@ -63,6 +76,6 @@ public class TestingElementalMaster {
         // New: Call the Simulator
         SimulateBattle simulator = new SimulateBattle();
         simulator.startBattle(player, enemy, scanf);
-        
+        */
     }
 }
