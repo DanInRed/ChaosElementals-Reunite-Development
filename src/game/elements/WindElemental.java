@@ -19,7 +19,7 @@ public class WindElemental implements Element{
     
     @Override
     public String getName(){
-        return "Shaun's Windhand!";
+        return "WINDHAND's Righthand!";
     }
     @Override
     public ElementType getType() { return ElementType.WIND; }

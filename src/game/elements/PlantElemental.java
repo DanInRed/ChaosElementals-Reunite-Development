@@ -19,7 +19,7 @@ public class PlantElemental implements Element{
     
     @Override
     public String getName(){
-        return "Roy's Awakened Venus Flytrap!";
+        return "PARTYCANNON's Awakened Venus Flytrap!";
     }
     @Override
     public ElementType getType() { return ElementType.PLANT; }

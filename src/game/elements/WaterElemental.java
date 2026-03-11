@@ -19,7 +19,7 @@ public class WaterElemental implements Element{
     
     @Override
     public String getName(){
-        return "Shim's Morphling!";
+        return "SLEEP's Morphling!";
     }
     @Override
     public ElementType getType() { return ElementType.WATER; }

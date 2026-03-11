@@ -19,7 +19,7 @@ public class ElectricElemental implements Element{
     
     @Override 
     public String getName(){
-        return "Roy's Electric Spirit!";
+        return "ElectricWizard's Electric Spirit!";
     }
     
     @Override
