@@ -19,7 +19,7 @@ public class FireElemental implements Element{
     
     @Override
     public String getName(){
-        return "Parba's Pyro Spawnling!";
+        return "SLAYER's Pyro Spawnling!";
     }
     @Override
     public ElementType getType() { return ElementType.FIRE; }

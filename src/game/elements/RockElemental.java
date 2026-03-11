@@ -19,7 +19,7 @@ public class RockElemental implements Element{
     
     @Override
     public String getName(){
-        return "Archai's Stone Golem!";
+        return "CROWBAR's Stone Golem!";
     }
     @Override
     public ElementType getType() { return ElementType.ROCK; }

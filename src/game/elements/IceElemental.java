@@ -19,7 +19,7 @@ public class IceElemental implements Element{
     
     @Override
     public String getName(){
-        return "Kaila's Ice Elemental Spawnling!";
+        return "DISSECTION's Ice Elemental Spawnling!";
     }
     @Override
     public ElementType getType() { return ElementType.ICE; }
