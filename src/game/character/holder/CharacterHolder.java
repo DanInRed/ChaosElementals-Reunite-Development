@@ -80,14 +80,18 @@ public class CharacterHolder {
     public double getRegenRate() { 
         return this.mana.getRegenRate();
     }
-
-    /*
+    
+    
     public String getIconPath() {
-        // This MUST match the package name exactly
-        // game.resources.icons becomes /game/resources/icons/
-        return "game/resources/icons/" + getElementType().name() + ".png";
+        String path = "/game/resources/icons/" + getElementType().name() + ".png";
+        
+        // Check if the resource actually exists
+        if (getClass().getResource(path) == null) {
+            return "/game/resources/icons/placeholder.png";
+        }
+        return path;
     }
-    */
+    
     //only AttackType requires a setter for it needs to be updated every Turn!!!
     public void setAttackType(AttackType attackType){
         this.attackType = attackType;

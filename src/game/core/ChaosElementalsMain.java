@@ -27,7 +27,7 @@ public class ChaosElementalsMain {
             game.setLocationRelativeTo(null); 
         });
         
-        /*
+        /* this is the terminal
         Scanner scanf = new Scanner(System.in);        
         
         System.out.println("---------------------------------Elemental Masters---------------------------------");
