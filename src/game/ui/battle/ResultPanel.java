@@ -28,19 +28,34 @@ public class ResultPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblResultPanel = new javax.swing.JLabel();
+
+        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 960));
+
+        lblResultPanel.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblResultPanel.setText("RESULT PANEL");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(329, 329, 329)
+                .addComponent(lblResultPanel)
+                .addContainerGap(614, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblResultPanel)
+                .addContainerGap(890, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblResultPanel;
     // End of variables declaration//GEN-END:variables
 }

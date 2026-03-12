@@ -1,4 +1,4 @@
-
+//TODO incorrect
 /*
  *  Project: TestingElementalMaster
  *  Author: Dash 
@@ -6,17 +6,34 @@
  */
 package game.ui.battle;
 
+import game.types.AttackType;
+import game.character.holder.CharacterHolder;
 /**
  *
  * @author Dash
  */
 public class BattlePanel extends javax.swing.JPanel {
-
+    private CharacterHolder activeEnemy;
+    private CharacterHolder player; 
     /**
      * Creates new form BattlePanel
      */
-    public BattlePanel() {
-        initComponents();
+    public BattlePanel(CharacterHolder enemy) {
+        this.activeEnemy = enemy;
+            initComponents();
+        
+        // Set up the JTextArea to look like a terminal
+        txtAreaBattlePanel.setEditable(false);
+        txtAreaBattlePanel.setLineWrap(true);
+        txtAreaBattlePanel.setWrapStyleWord(true);
+
+        // Now, run your "Terminal" logic:
+        logToPanel("----------------- Elemental Masters -----------------");
+        logToPanel("Wait a minute... is that?");
+        logToPanel("!!! A WILD ENEMY APPEARS !!!");
+        logToPanel("The enemy is a " + enemy.getElementType() + " [" + enemy.getName() + "]");
+        logToPanel("-----------------------------------------------------");
+        logToPanel("Choose your element to counter!");
     }
 
     /**
@@ -28,19 +45,189 @@ public class BattlePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblBattlePanel = new javax.swing.JLabel();
+        lblVS = new javax.swing.JLabel();
+        lblPlayerName = new javax.swing.JLabel();
+        lblEnemyName = new javax.swing.JLabel();
+        lblPlayerIcon = new javax.swing.JLabel();
+        lblEnemyIcon = new javax.swing.JLabel();
+        pnlActionsButton = new javax.swing.JPanel();
+        btnNormal = new javax.swing.JButton();
+        btnSkill1 = new javax.swing.JButton();
+        btnSkill2 = new javax.swing.JButton();
+        btnUltimate = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaBattlePanel = new javax.swing.JTextArea();
+        lblAttackTypes = new javax.swing.JLabel();
+
+        setMaximumSize(new java.awt.Dimension(1280, 960));
+        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 960));
+
+        lblBattlePanel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblBattlePanel.setText("BATTLE PANNEL");
+
+        lblVS.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblVS.setForeground(new java.awt.Color(255, 0, 0));
+        lblVS.setText("VS");
+
+        lblPlayerName.setText("PLAYER NAME");
+
+        lblEnemyName.setText(" ENEMY NAME");
+
+        lblPlayerIcon.setText("PlayerIcon");
+        lblPlayerIcon.setMaximumSize(new java.awt.Dimension(192, 192));
+        lblPlayerIcon.setMinimumSize(new java.awt.Dimension(192, 192));
+        lblPlayerIcon.setPreferredSize(new java.awt.Dimension(192, 192));
+
+        lblEnemyIcon.setText("EnemyIcon");
+        lblEnemyIcon.setMaximumSize(new java.awt.Dimension(192, 192));
+        lblEnemyIcon.setMinimumSize(new java.awt.Dimension(192, 192));
+        lblEnemyIcon.setPreferredSize(new java.awt.Dimension(192, 192));
+
+        pnlActionsButton.setMaximumSize(new java.awt.Dimension(384, 64));
+        pnlActionsButton.setMinimumSize(new java.awt.Dimension(384, 64));
+        pnlActionsButton.setPreferredSize(new java.awt.Dimension(384, 64));
+        pnlActionsButton.setLayout(new java.awt.GridLayout());
+
+        btnNormal.setText("Normal");
+        btnNormal.addActionListener(this::btnNormalActionPerformed);
+        pnlActionsButton.add(btnNormal);
+
+        btnSkill1.setText("SKILL 1");
+        btnSkill1.addActionListener(this::btnSkill1ActionPerformed);
+        pnlActionsButton.add(btnSkill1);
+
+        btnSkill2.setText("SKILL 2");
+        btnSkill2.addActionListener(this::btnSkill2ActionPerformed);
+        pnlActionsButton.add(btnSkill2);
+
+        btnUltimate.setText("ULTIMATE");
+        btnUltimate.addActionListener(this::btnUltimateActionPerformed);
+        pnlActionsButton.add(btnUltimate);
+
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(348, 144));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(512, 288));
+
+        txtAreaBattlePanel.setColumns(25);
+        txtAreaBattlePanel.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        txtAreaBattlePanel.setRows(10);
+        txtAreaBattlePanel.setMaximumSize(new java.awt.Dimension(348, 144));
+        txtAreaBattlePanel.setMinimumSize(new java.awt.Dimension(348, 144));
+        txtAreaBattlePanel.setPreferredSize(new java.awt.Dimension(384, 144));
+        jScrollPane1.setViewportView(txtAreaBattlePanel);
+
+        lblAttackTypes.setText("Attack Types");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(285, 285, 285)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(554, 554, 554)
+                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblPlayerName)
+                        .addGap(270, 270, 270)
+                        .addComponent(lblVS)
+                        .addGap(246, 246, 246)
+                        .addComponent(lblEnemyName)
+                        .addGap(273, 273, 273))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(394, 394, 394)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlActionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(374, 374, 374))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblAttackTypes)
+                        .addGap(609, 609, 609))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(547, 547, 547)
+                .addComponent(lblBattlePanel)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(201, 201, 201)
+                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(lblBattlePanel)
+                        .addGap(144, 144, 144)
+                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPlayerName)
+                    .addComponent(lblEnemyName)
+                    .addComponent(lblVS))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(lblAttackTypes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlActionsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
+        //TODO
+    }//GEN-LAST:event_btnNormalActionPerformed
+
+    private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
+        //TODO
+    }//GEN-LAST:event_btnSkill1ActionPerformed
+
+    private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
+        //TODO
+    }//GEN-LAST:event_btnSkill2ActionPerformed
+
+    private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
+        //TODO
+    }//GEN-LAST:event_btnUltimateActionPerformed
+    
+    private void logToPanel(String text) {
+        // Basic centering logic: Add spaces if the line is short
+        int width = 25; // Adjust this based on your TextArea width
+        int padding = (width - text.length()) / 2;
+
+        String centeredText = "";
+        for (int i = 0; i < padding; i++) {
+            centeredText += " ";
+        }
+
+        txtAreaBattlePanel.append(centeredText + text + "\n");
+        txtAreaBattlePanel.setCaretPosition(txtAreaBattlePanel.getDocument().getLength());
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNormal;
+    private javax.swing.JButton btnSkill1;
+    private javax.swing.JButton btnSkill2;
+    private javax.swing.JButton btnUltimate;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAttackTypes;
+    private javax.swing.JLabel lblBattlePanel;
+    private javax.swing.JLabel lblEnemyIcon;
+    private javax.swing.JLabel lblEnemyName;
+    private javax.swing.JLabel lblPlayerIcon;
+    private javax.swing.JLabel lblPlayerName;
+    private javax.swing.JLabel lblVS;
+    private javax.swing.JPanel pnlActionsButton;
+    private javax.swing.JTextArea txtAreaBattlePanel;
     // End of variables declaration//GEN-END:variables
 }

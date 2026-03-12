@@ -32,7 +32,7 @@ public class SimulateBattle{
             //Mana regenerates by 10 after the round ends            
             if(round > 1){ 
                 pause(1000);
-                player.getMana().regenerate();
+                player.getMana().regenerate();  
                 pause(1000);
                 enemy.getMana().regenerate();
 
