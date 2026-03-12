@@ -1,41 +1,48 @@
-# --- Compiled Files (The "Binaries") ---
+# =================================================================
+# TestingElementalMaster - .gitignore
+# =================================================================
+
+# --- Compiled Files (Binaries) ---
+# We never track these because they are generated every time you 'Build'
 *.class
-*.exe
 *.jar
 *.war
 *.ear
 *.zip
 *.tar.gz
+*.exe
 
-# --- Scripts & Executables ---
-*.bat
-*.sh
-*.ps1
-*.cmd
-bin/
+# --- Build Folders ---
+# Ant creates these. Tracking them causes merge conflicts for your team.
 build/
 dist/
+bin/
+nbdist/
+
+# --- NetBeans Project Metadata ---
+# We MUST track the XML and Properties files, or the project won't open.
+# We ONLY ignore the 'private' folder which contains your personal PC settings.
 nbproject/private/
 
-nbproject/*
-
-!nbproject/project.xml
-!nbproject/project.properties
-!nbproject/genfiles.properties
-!nbproject/build-impl.xml
-
-# --- NetBeans / IDE Specifics ---
-nbproject/
-nbdist/
+# --- IDE Config Files ---
+# These are usually specific to your local setup (e.g., which file you had open last)
 nbactions.xml
 nb-configuration.xml
 .netbeans.derby/
 
 # --- OS Specifics (Hidden Junk) ---
+# System-generated files that clutter the repository
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # --- Logs and Temporary Files ---
 *.log
 tmp/
 temp/
+
+# =================================================================
+# NOTE: If your 'game.ui' packages are still missing in 'git status',
+# run the following command in your terminal:
+# git add -f src/game/ui/
+# =================================================================
