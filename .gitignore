@@ -23,6 +23,8 @@ nbdist/
 # We MUST track the XML and Properties files, or the project won't open.
 # We ONLY ignore the 'private' folder which contains your personal PC settings.
 nbproject/private/
+nbproject/genfiles.properties
+nbproject/ant-deploy.xml    
 
 # --- IDE Config Files ---
 # These are usually specific to your local setup (e.g., which file you had open last)
