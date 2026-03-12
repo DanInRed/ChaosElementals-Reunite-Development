@@ -41,6 +41,21 @@ public class CharacterHolder {
     public HealthPoints getHP() { return this.hp; }
     public ManaPoints getMana() { return this.mana;} //retrieve mana
     public String getName(){return element.getName(); }
+    // Added getMaxHealth() to take the initial HP of the characters
+    public double getMaxHealth() {
+        return this.hp.getMaxHP();
+    }
+    
+    //Add setters here
+    public void setCurrentHP(double amount) {
+        // Ensure we don't exceed Max HP or go below 0
+        double cappedHP = Math.min(amount, this.hp.getMaxHP());
+        this.hp.setCurrentHP(Math.max(0, cappedHP));
+    }
+    
+    //
+    
+    
     
     // Shortcut for the battle loop
     public boolean isAlive() {
@@ -48,7 +63,8 @@ public class CharacterHolder {
     }
     
     public void takeDamage(double amount) {
-        this.hp.takeDamage(amount); // Calls the method inside HealthPoints.java
+        double newHP = this.hp.getCurrentHP() - amount;
+        this.hp.setCurrentHP(Math.max(0, newHP)); // Prevents negative HP
     }
     
     public void manaCost(double amount){
@@ -65,6 +81,13 @@ public class CharacterHolder {
         return this.mana.getRegenRate();
     }
 
+    /*
+    public String getIconPath() {
+        // This MUST match the package name exactly
+        // game.resources.icons becomes /game/resources/icons/
+        return "game/resources/icons/" + getElementType().name() + ".png";
+    }
+    */
     //only AttackType requires a setter for it needs to be updated every Turn!!!
     public void setAttackType(AttackType attackType){
         this.attackType = attackType;

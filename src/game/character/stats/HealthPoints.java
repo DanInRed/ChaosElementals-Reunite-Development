@@ -30,7 +30,11 @@ public class HealthPoints {
         }
     }
 
+    public void setCurrentHP(double amount) {this.currentHP = amount; }
+    
     public double getCurrentHP() { return currentHP; }
     public double getMaxHP() { return maxHP; }
     public boolean isFainted() { return currentHP <= 0; }
+    
+    
 }
