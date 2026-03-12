@@ -125,17 +125,37 @@ public class MenuPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-                // 1. GENERATE THE ENEMY (Logic moved from your Main)
+            // 1. GENERATE THE ENEMY (Same as the main terminal logic)
             Random rand = new Random();
             int enemyChoice = rand.nextInt(8);
             Element enemyType = ElementValidator.getElementObject(enemyChoice);
             CharacterHolder enemy = new CharacterHolder(enemyType);
 
-            // 2. TRIGGER THE UI SWAP
-            game.ui.GameWindow topWindow = (game.ui.GameWindow) javax.swing.SwingUtilities.getWindowAncestor(this);
-            if (topWindow != null) {
-                // We pass the 'enemy' to the BattlePanel constructor
-                topWindow.setView(new game.ui.battle.BattlePanel(enemy));
+            // 2. GET PLAYER CHOICE (Replacing Scanner)
+            String[] elements = {"Fire", "Ice", "Plant", "Rock", "Electric", "Water", "Wind", "Metal"};
+            String choice = (String) javax.swing.JOptionPane.showInputDialog(
+                    this, 
+                    "A wild " + enemy.getName() + " (" + enemy.getElementType() + ") appeared!\nSelect your Element:",
+                    "Choose Your Fighter",
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null, 
+                    elements, 
+                    elements[0]
+            );
+
+            // 3. TRIGGER BATTLE IF PLAYER DIDN'T CANCEL
+            if (choice != null) {
+                // Convert choice string to Element object
+                int playerIndex = java.util.Arrays.asList(elements).indexOf(choice);
+                Element playerType = ElementValidator.getElementObject(playerIndex);
+                CharacterHolder player = new CharacterHolder(playerType);
+
+                // 4. TRIGGER THE UI SWAP
+                game.ui.GameWindow topWindow = (game.ui.GameWindow) javax.swing.SwingUtilities.getWindowAncestor(this);
+                if (topWindow != null) {
+                    // Updated constructor to take BOTH player and enemy
+                    topWindow.setView(new game.ui.battle.BattlePanel(player, enemy));
+                }
             }   
     }//GEN-LAST:event_btnStartActionPerformed
 

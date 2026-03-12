@@ -14,13 +14,25 @@ import game.character.holder.CharacterHolder;
  */
 public class BattlePanel extends javax.swing.JPanel {
     private CharacterHolder activeEnemy;
-    private CharacterHolder player; 
+    private CharacterHolder player;
+    private game.battle.simulator.SimulateBattle simulator; // The Bridge
     /**
      * Creates new form BattlePanel
      */
-    public BattlePanel(CharacterHolder enemy) {
+    public BattlePanel(CharacterHolder player, CharacterHolder enemy) {
+        this.player = player;
         this.activeEnemy = enemy;
-            initComponents();
+        this.simulator = new game.battle.simulator.SimulateBattle(); // Initialize logic
+        
+        initComponents(); // 1. Create the UI objects
+        //setupIcons();    // 2. Load the images into those objects currently not working
+        
+        
+        // 1. Setup UI labels with the actual data
+        lblPlayerName.setText(player.getName() + " (" + player.getElementType() + ")");
+        lblEnemyName.setText(enemy.getName() + " (" + enemy.getElementType() + ")");
+        
+        refreshStats(); //Show initial HP values for both player and enemy
         
         // Set up the JTextArea to look like a terminal
         txtAreaBattlePanel.setEditable(false);
@@ -28,14 +40,46 @@ public class BattlePanel extends javax.swing.JPanel {
         txtAreaBattlePanel.setWrapStyleWord(true);
 
         // Now, run your "Terminal" logic:
-        logToPanel("----------------- Elemental Masters -----------------");
-        logToPanel("Wait a minute... is that?");
-        logToPanel("!!! A WILD ENEMY APPEARS !!!");
-        logToPanel("The enemy is a " + enemy.getElementType() + " [" + enemy.getName() + "]");
-        logToPanel("-----------------------------------------------------");
-        logToPanel("Choose your element to counter!");
+        // 3. Welcome Message
+        logToPanel("A duel begins: " + player.getName() + " vs " + enemy.getName());
+        logToPanel("What will you do?");
     }
+    /* currently not working other related files are CharacterHolder and ElementType
+    private void setupIcons() {
+        try {
+            // 1. Get the path (e.g., "/game/resources/icons/FIRE.png")
+            String pPath = player.getIconPath();
+            String ePath = activeEnemy.getIconPath();
 
+            // 2. Try to find the file
+            java.net.URL pURL = getClass().getResource(pPath);
+            java.net.URL eURL = getClass().getResource(ePath);
+
+            // 3. Handle Player Icon
+            if (pURL != null) {
+                javax.swing.ImageIcon fullSizeIcon = new javax.swing.ImageIcon(pURL);
+                // This shrinks the 600px Canva image to fit your 192px Label
+                java.awt.Image scaledImg = fullSizeIcon.getImage().getScaledInstance(192, 192, java.awt.Image.SCALE_SMOOTH);
+                lblPlayerIcon.setIcon(new javax.swing.ImageIcon(scaledImg));
+                lblPlayerIcon.setText(""); 
+            } else {
+                System.err.println("Could not find player icon at: " + pPath);
+            }
+
+            // 4. Handle Enemy Icon
+            if (eURL != null) {
+                javax.swing.ImageIcon fullSizeIcon = new javax.swing.ImageIcon(eURL);
+                java.awt.Image scaledImg = fullSizeIcon.getImage().getScaledInstance(192, 192, java.awt.Image.SCALE_SMOOTH);
+                lblEnemyIcon.setIcon(new javax.swing.ImageIcon(scaledImg));
+                lblEnemyIcon.setText("");
+            } else {
+                System.err.println("Could not find enemy icon at: " + ePath);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    */
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +103,10 @@ public class BattlePanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaBattlePanel = new javax.swing.JTextArea();
         lblAttackTypes = new javax.swing.JLabel();
+        lblPlayerHP = new javax.swing.JLabel();
+        lblEnemyHP = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jProgressBar2 = new javax.swing.JProgressBar();
 
         setMaximumSize(new java.awt.Dimension(1280, 960));
         setMinimumSize(new java.awt.Dimension(1280, 960));
@@ -71,16 +119,25 @@ public class BattlePanel extends javax.swing.JPanel {
         lblVS.setForeground(new java.awt.Color(255, 0, 0));
         lblVS.setText("VS");
 
+        lblPlayerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPlayerName.setText("PLAYER NAME");
 
+        lblEnemyName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEnemyName.setText(" ENEMY NAME");
+        lblEnemyName.setMaximumSize(new java.awt.Dimension(300, 16));
+        lblEnemyName.setMinimumSize(new java.awt.Dimension(300, 16));
+        lblEnemyName.setPreferredSize(new java.awt.Dimension(300, 16));
 
-        lblPlayerIcon.setText("PlayerIcon");
+        lblPlayerIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPlayerIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/game.resources.icons/P.png"))); // NOI18N
+        lblPlayerIcon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         lblPlayerIcon.setMaximumSize(new java.awt.Dimension(192, 192));
         lblPlayerIcon.setMinimumSize(new java.awt.Dimension(192, 192));
         lblPlayerIcon.setPreferredSize(new java.awt.Dimension(192, 192));
 
-        lblEnemyIcon.setText("EnemyIcon");
+        lblEnemyIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEnemyIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/game.resources.icons/E.png"))); // NOI18N
+        lblEnemyIcon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         lblEnemyIcon.setMaximumSize(new java.awt.Dimension(192, 192));
         lblEnemyIcon.setMinimumSize(new java.awt.Dimension(192, 192));
         lblEnemyIcon.setPreferredSize(new java.awt.Dimension(192, 192));
@@ -88,7 +145,7 @@ public class BattlePanel extends javax.swing.JPanel {
         pnlActionsButton.setMaximumSize(new java.awt.Dimension(384, 64));
         pnlActionsButton.setMinimumSize(new java.awt.Dimension(384, 64));
         pnlActionsButton.setPreferredSize(new java.awt.Dimension(384, 64));
-        pnlActionsButton.setLayout(new java.awt.GridLayout());
+        pnlActionsButton.setLayout(new java.awt.GridLayout(1, 0));
 
         btnNormal.setText("Normal");
         btnNormal.addActionListener(this::btnNormalActionPerformed);
@@ -106,38 +163,32 @@ public class BattlePanel extends javax.swing.JPanel {
         btnUltimate.addActionListener(this::btnUltimateActionPerformed);
         pnlActionsButton.add(btnUltimate);
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(348, 144));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(512, 288));
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(512, 144));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(512, 144));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(512, 144));
 
         txtAreaBattlePanel.setColumns(25);
         txtAreaBattlePanel.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         txtAreaBattlePanel.setRows(10);
-        txtAreaBattlePanel.setMaximumSize(new java.awt.Dimension(348, 144));
-        txtAreaBattlePanel.setMinimumSize(new java.awt.Dimension(348, 144));
-        txtAreaBattlePanel.setPreferredSize(new java.awt.Dimension(384, 144));
+        txtAreaBattlePanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtAreaBattlePanel.setMaximumSize(new java.awt.Dimension(512, 144));
+        txtAreaBattlePanel.setMinimumSize(new java.awt.Dimension(512, 144));
         jScrollPane1.setViewportView(txtAreaBattlePanel);
 
         lblAttackTypes.setText("Attack Types");
+
+        lblPlayerHP.setText("Health: ");
+
+        lblEnemyHP.setText("Health:");
+
+        jProgressBar1.setForeground(new java.awt.Color(255, 0, 0));
+
+        jProgressBar2.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(285, 285, 285)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(554, 554, 554)
-                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblPlayerName)
-                        .addGap(270, 270, 270)
-                        .addComponent(lblVS)
-                        .addGap(246, 246, 246)
-                        .addComponent(lblEnemyName)
-                        .addGap(273, 273, 273))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(394, 394, 394)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,24 +204,66 @@ public class BattlePanel extends javax.swing.JPanel {
                 .addGap(547, 547, 547)
                 .addComponent(lblBattlePanel)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(633, 633, 633)
+                .addComponent(lblVS)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(285, 285, 285)
+                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(274, 274, 274)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblPlayerHP, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(252, 252, 252))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 6, Short.MAX_VALUE)
+                                .addComponent(lblEnemyHP, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(326, 326, 326))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(lblBattlePanel)
-                        .addGap(144, 144, 144)
-                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(24, 24, 24)
+                .addComponent(lblBattlePanel)
+                .addGap(87, 87, 87)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPlayerName)
-                    .addComponent(lblEnemyName)
-                    .addComponent(lblVS))
+                    .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPlayerHP))
+                        .addGap(19, 19, 19)
+                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(lblVS))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEnemyHP)
+                            .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -183,32 +276,138 @@ public class BattlePanel extends javax.swing.JPanel {
 
     
     private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
-        //TODO
+        handleAttack(AttackType.NORMAL);
     }//GEN-LAST:event_btnNormalActionPerformed
 
     private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
-        //TODO
+        handleAttack(AttackType.SKILL_1);
     }//GEN-LAST:event_btnSkill1ActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
-        //TODO
+        handleAttack(AttackType.SKILL_2);
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
     private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
-        //TODO
+        handleAttack(AttackType.ULTIMATE);
     }//GEN-LAST:event_btnUltimateActionPerformed
+    //Replaced the String parameter and method is now handleAttack
+    private void handleAttack(AttackType type) {
+        // 1. Calculate Damage using your existing engine
+        double dmg = game.engine.DamageCalculator.calculateDamage(player, activeEnemy, type);
+
+        // 2. Apply Damage to the Object
+        activeEnemy.takeDamage(dmg);
+
+        // 3. Update the UI
+        logToPanel(player.getName() + " used " + type + "!");
+        logToPanel("Dealt " + (int)dmg + " damage!");
+        refreshStats();
+
+        // 4. Check for Win or Enemy Counter
+        if (!activeEnemy.isAlive()) {
+            logToPanel("VICTORY! " + activeEnemy.getName() + " fainted.");
+            endBattle();
+        } else {
+            startEnemyTurnTimer();
+        }
+    }
+    
+    private void startEnemyTurnTimer() {
+        // 1. Disable buttons so the player can't attack twice!
+        setButtonsEnabled(false);
+
+        // 2. Create a timer (1.5 seconds delay)
+        javax.swing.Timer enemyTimer = new javax.swing.Timer(1500, e -> {
+            // Logic from your terminal simulator
+            AttackType enemyMove = AttackType.NORMAL; // You can add your random logic here later
+            double dmg = game.engine.DamageCalculator.calculateDamage(activeEnemy, player, enemyMove);
+
+            // Update Backend
+            player.takeDamage(dmg);
+
+            // Update UI
+            logToPanel(activeEnemy.getName() + " attacks with " + enemyMove + "!");
+            logToPanel("You took " + (int)dmg + " damage.");
+            refreshStats();
+
+            // 3. Check if player survived
+            if (!player.isAlive()) {
+                logToPanel("DEFEAT... You have fallen.");
+                endBattle();
+            } else {
+                // Re-enable buttons for the player's next turn
+                setButtonsEnabled(true);
+                logToPanel("Your turn!");
+            }
+        });
+
+        enemyTimer.setRepeats(false); // Only run once
+        enemyTimer.start();
+    }
+    
+    
+    private void refreshStats() {
+        // 1. Set the Range (Do this so the bar scales correctly)
+        jProgressBar1.setMinimum(0);
+        jProgressBar1.setMaximum((int)player.getHP().getMaxHP());
+
+        jProgressBar2.setMinimum(0);
+        jProgressBar2.setMaximum((int)activeEnemy.getHP().getMaxHP());
+
+        // 2. Set the Current Value
+        jProgressBar1.setValue((int)player.getCurrentHealth());
+        jProgressBar2.setValue((int)activeEnemy.getCurrentHealth());
+
+        // 3. Labels
+        lblPlayerHP.setText("HP: " + (int)player.getCurrentHealth() + "/" + (int)player.getHP().getMaxHP());
+        lblEnemyHP.setText("HP: " + (int)activeEnemy.getCurrentHealth());
+
+        // 4. Color Logic
+        updateBarColors();
+    }
+    
+    private void updateBarColors() {
+        double playerPercent = (player.getCurrentHealth() / player.getHP().getMaxHP()) * 100;
+
+        if (playerPercent <= 25) {
+            jProgressBar1.setForeground(java.awt.Color.RED);
+        } else if (playerPercent <= 50) {
+            jProgressBar1.setForeground(java.awt.Color.ORANGE);
+        } else {
+            jProgressBar1.setForeground(java.awt.Color.GREEN);
+        }
+    }
+    
+    private void endBattle() {
+    setButtonsEnabled(false);
+    
+    // Using your JOptionPane trick from earlier!
+    String winner = player.isAlive() ? "Victory!" : "Defeat...";
+    javax.swing.JOptionPane.showMessageDialog(this, "The battle is over: " + winner);
+    
+    // TODO: Add code here to switch back to your Main Menu or Map
+}
+
+    // Helper method to keep code clean
+    private void setButtonsEnabled(boolean enabled) {
+        btnNormal.setEnabled(enabled);
+        btnSkill1.setEnabled(enabled);
+        btnSkill2.setEnabled(enabled);
+        btnUltimate.setEnabled(enabled);
+    }
     
     private void logToPanel(String text) {
-        // Basic centering logic: Add spaces if the line is short
-        int width = 25; // Adjust this based on your TextArea width
-        int padding = (width - text.length()) / 2;
+        int width = 25; 
+        int padding = Math.max(0, (width - text.length()) / 2);
 
-        String centeredText = "";
+        StringBuilder centeredText = new StringBuilder();
         for (int i = 0; i < padding; i++) {
-            centeredText += " ";
+            centeredText.append(" ");
         }
 
-        txtAreaBattlePanel.append(centeredText + text + "\n");
+        txtAreaBattlePanel.append(centeredText.toString() + text + "\n");
+
+        // This moves the "cursor" to the very end of the text
         txtAreaBattlePanel.setCaretPosition(txtAreaBattlePanel.getDocument().getLength());
     }
     
@@ -219,11 +418,15 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnSkill1;
     private javax.swing.JButton btnSkill2;
     private javax.swing.JButton btnUltimate;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAttackTypes;
     private javax.swing.JLabel lblBattlePanel;
+    private javax.swing.JLabel lblEnemyHP;
     private javax.swing.JLabel lblEnemyIcon;
     private javax.swing.JLabel lblEnemyName;
+    private javax.swing.JLabel lblPlayerHP;
     private javax.swing.JLabel lblPlayerIcon;
     private javax.swing.JLabel lblPlayerName;
     private javax.swing.JLabel lblVS;

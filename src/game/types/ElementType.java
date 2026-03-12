@@ -33,4 +33,17 @@ public enum ElementType {
     public int getIndex() {
         return index;
     }
+    
+    //unused helper methods
+    /*
+    // HELPER: Dynamic Pathing
+    public String getIconPath() {
+        return "/game/resources/icons/" + this.name() + ".png";
+    }
+
+    // HELPER: UI Formatting
+    public String getFormattedName() {
+        return this.name().charAt(0) + this.name().substring(1).toLowerCase();
+    }
+    */
 }
