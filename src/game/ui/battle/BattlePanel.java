@@ -73,47 +73,66 @@ public class BattlePanel extends javax.swing.JPanel {
         btnSkill1 = new javax.swing.JButton();
         btnSkill2 = new javax.swing.JButton();
         btnUltimate = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        terminalScrollPane = new javax.swing.JScrollPane();
         txtAreaBattlePanel = new javax.swing.JTextArea();
         lblAttackTypes = new javax.swing.JLabel();
         lblPlayerHP = new javax.swing.JLabel();
         lblEnemyHP = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
-        jProgressBar2 = new javax.swing.JProgressBar();
+        progPlayerHPBar = new javax.swing.JProgressBar();
+        progEnemyHPBar = new javax.swing.JProgressBar();
         lblEnemyTakeDamage = new javax.swing.JLabel();
         lblPlayerTakeDamage = new javax.swing.JLabel();
+        lblPlayerMana = new javax.swing.JLabel();
+        progPlayerManaBar = new javax.swing.JProgressBar();
+        lblEnemyMana = new javax.swing.JLabel();
+        progEnemyManaBar = new javax.swing.JProgressBar();
 
         setMaximumSize(new java.awt.Dimension(1280, 960));
         setMinimumSize(new java.awt.Dimension(1280, 960));
         setPreferredSize(new java.awt.Dimension(1280, 960));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBattlePanel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblBattlePanel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblBattlePanel.setText("BATTLE PANNEL");
+        lblBattlePanel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblBattlePanel.setMaximumSize(new java.awt.Dimension(200, 32));
+        lblBattlePanel.setMinimumSize(new java.awt.Dimension(200, 32));
+        lblBattlePanel.setPreferredSize(new java.awt.Dimension(200, 32));
+        add(lblBattlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 32));
 
         lblVS.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblVS.setForeground(new java.awt.Color(255, 0, 0));
         lblVS.setText("VS");
+        lblVS.setMaximumSize(new java.awt.Dimension(32, 32));
+        lblVS.setMinimumSize(new java.awt.Dimension(32, 32));
+        lblVS.setPreferredSize(new java.awt.Dimension(32, 32));
+        add(lblVS, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 105, -1, -1));
 
         lblPlayerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPlayerName.setText("PLAYER NAME");
+        add(lblPlayerName, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 105, 300, -1));
 
         lblEnemyName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEnemyName.setText(" ENEMY NAME");
         lblEnemyName.setMaximumSize(new java.awt.Dimension(78, 16));
         lblEnemyName.setMinimumSize(new java.awt.Dimension(78, 16));
         lblEnemyName.setPreferredSize(new java.awt.Dimension(78, 16));
+        add(lblEnemyName, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 105, 300, -1));
 
         lblPlayerIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPlayerIcon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         lblPlayerIcon.setMaximumSize(new java.awt.Dimension(512, 512));
         lblPlayerIcon.setMinimumSize(new java.awt.Dimension(512, 512));
         lblPlayerIcon.setPreferredSize(new java.awt.Dimension(192, 192));
+        add(lblPlayerIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(361, 200, -1, -1));
 
         lblEnemyIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEnemyIcon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         lblEnemyIcon.setMaximumSize(new java.awt.Dimension(192, 192));
         lblEnemyIcon.setMinimumSize(new java.awt.Dimension(192, 192));
         lblEnemyIcon.setPreferredSize(new java.awt.Dimension(192, 192));
+        add(lblEnemyIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 200, -1, -1));
 
         pnlActionsButton.setMaximumSize(new java.awt.Dimension(384, 64));
         pnlActionsButton.setMinimumSize(new java.awt.Dimension(384, 64));
@@ -136,9 +155,11 @@ public class BattlePanel extends javax.swing.JPanel {
         btnUltimate.addActionListener(this::btnUltimateActionPerformed);
         pnlActionsButton.add(btnUltimate);
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(512, 144));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(512, 144));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(512, 144));
+        add(pnlActionsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 609, 512, -1));
+
+        terminalScrollPane.setMaximumSize(new java.awt.Dimension(512, 144));
+        terminalScrollPane.setMinimumSize(new java.awt.Dimension(512, 144));
+        terminalScrollPane.setPreferredSize(new java.awt.Dimension(512, 144));
 
         txtAreaBattlePanel.setColumns(25);
         txtAreaBattlePanel.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -146,127 +167,79 @@ public class BattlePanel extends javax.swing.JPanel {
         txtAreaBattlePanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
         txtAreaBattlePanel.setMaximumSize(new java.awt.Dimension(512, 144));
         txtAreaBattlePanel.setMinimumSize(new java.awt.Dimension(512, 144));
-        jScrollPane1.setViewportView(txtAreaBattlePanel);
+        terminalScrollPane.setViewportView(txtAreaBattlePanel);
+
+        add(terminalScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 443, -1, -1));
 
         lblAttackTypes.setText("Attack Types");
+        add(lblAttackTypes, new org.netbeans.lib.awtextra.AbsoluteConstraints(603, 587, -1, -1));
 
+        lblPlayerHP.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPlayerHP.setText("Health: ");
+        lblPlayerHP.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblPlayerHP.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblPlayerHP.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblPlayerHP, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 145, 72, -1));
 
+        lblEnemyHP.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEnemyHP.setText("Health:");
+        lblEnemyHP.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblEnemyHP.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblEnemyHP.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblEnemyHP.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblEnemyHP, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 145, 71, -1));
 
-        jProgressBar1.setForeground(new java.awt.Color(255, 0, 0));
+        progPlayerHPBar.setForeground(new java.awt.Color(255, 0, 0));
+        progPlayerHPBar.setMaximumSize(new java.awt.Dimension(150, 16));
+        progPlayerHPBar.setMinimumSize(new java.awt.Dimension(150, 16));
+        progPlayerHPBar.setPreferredSize(new java.awt.Dimension(150, 16));
+        add(progPlayerHPBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(407, 145, -1, 16));
 
-        jProgressBar2.setForeground(new java.awt.Color(255, 0, 0));
+        progEnemyHPBar.setForeground(new java.awt.Color(255, 0, 0));
+        progEnemyHPBar.setMaximumSize(new java.awt.Dimension(150, 16));
+        progEnemyHPBar.setMinimumSize(new java.awt.Dimension(150, 16));
+        progEnemyHPBar.setPreferredSize(new java.awt.Dimension(150, 4));
+        add(progEnemyHPBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(833, 145, -1, 16));
 
         lblEnemyTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblEnemyTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
         lblEnemyTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblEnemyTakeDamage, new org.netbeans.lib.awtextra.AbsoluteConstraints(716, 211, 70, 19));
 
         lblPlayerTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPlayerTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
         lblPlayerTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblPlayerTakeDamage, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 211, 78, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(547, 547, 547)
-                .addComponent(lblBattlePanel)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(265, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlActionsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(374, 374, 374))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblAttackTypes)
-                        .addGap(609, 609, 609))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lblPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(133, 133, 133))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblPlayerHP, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblPlayerTakeDamage, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, Short.MAX_VALUE)
-                                        .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(163, 163, 163)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(lblEnemyHP, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(301, 301, 301))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(62, 62, 62)
-                                        .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblEnemyTakeDamage, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(202, 202, 202))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblVS)
-                        .addGap(604, 604, 604))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(lblBattlePanel)
-                .addGap(49, 49, 49)
-                .addComponent(lblVS)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPlayerName)
-                    .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEnemyHP)
-                            .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPlayerHP))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(lblEnemyTakeDamage, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(lblPlayerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(lblPlayerTakeDamage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(52, 52, 52)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(lblAttackTypes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlActionsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
-        );
+        lblPlayerMana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPlayerMana.setText("Mana:");
+        lblPlayerMana.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblPlayerMana.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblPlayerMana.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblPlayerMana.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblPlayerMana, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 176, -1, -1));
+
+        progPlayerManaBar.setMaximumSize(new java.awt.Dimension(150, 16));
+        progPlayerManaBar.setMinimumSize(new java.awt.Dimension(150, 16));
+        progPlayerManaBar.setPreferredSize(new java.awt.Dimension(150, 16));
+        add(progPlayerManaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(407, 176, -1, 16));
+
+        lblEnemyMana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEnemyMana.setText("Mana:");
+        lblEnemyMana.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblEnemyMana.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblEnemyMana.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblEnemyMana.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblEnemyMana, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 176, -1, -1));
+
+        progEnemyManaBar.setMaximumSize(new java.awt.Dimension(150, 16));
+        progEnemyManaBar.setMinimumSize(new java.awt.Dimension(150, 16));
+        progEnemyManaBar.setPreferredSize(new java.awt.Dimension(150, 16));
+        add(progEnemyManaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(832, 176, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     
@@ -345,11 +318,14 @@ public class BattlePanel extends javax.swing.JPanel {
     
     private void refreshStats() {
         // Utilizing the engine //TODO
-        UIUpdater.refreshHealthBar(jProgressBar1, player);
-        UIUpdater.refreshHealthBar(jProgressBar2, activeEnemy);
-
+        UIUpdater.refreshHealthBar(progPlayerHPBar, player);
+        UIUpdater.refreshHealthBar(progEnemyHPBar, activeEnemy);
+        UIUpdater.refreshManaBar(progPlayerManaBar, player);
+        UIUpdater.refreshManaBar(progEnemyManaBar, activeEnemy);
         lblPlayerHP.setText("HP: " + (int)player.getCurrentHealth() + "/" + (int)player.getHP().getMaxHP());
         lblEnemyHP.setText("HP: " + (int)activeEnemy.getCurrentHealth() + "/" + (int)activeEnemy.getHP().getMaxHP());
+        lblPlayerMana.setText("Mana: " + (int)player.getCurrentMana() + "/" + (int)player.getMana().getMaxMana());
+        lblEnemyMana.setText("Mana: " + (int)activeEnemy.getCurrentMana() + "/" + (int)activeEnemy.getMana().getMaxMana());
     }
     
     private void setupIcons() {
@@ -405,21 +381,25 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnSkill1;
     private javax.swing.JButton btnSkill2;
     private javax.swing.JButton btnUltimate;
-    private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JProgressBar jProgressBar2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAttackTypes;
     private javax.swing.JLabel lblBattlePanel;
     private javax.swing.JLabel lblEnemyHP;
     private javax.swing.JLabel lblEnemyIcon;
+    private javax.swing.JLabel lblEnemyMana;
     private javax.swing.JLabel lblEnemyName;
     private javax.swing.JLabel lblEnemyTakeDamage;
     private javax.swing.JLabel lblPlayerHP;
     private javax.swing.JLabel lblPlayerIcon;
+    private javax.swing.JLabel lblPlayerMana;
     private javax.swing.JLabel lblPlayerName;
     private javax.swing.JLabel lblPlayerTakeDamage;
     private javax.swing.JLabel lblVS;
     private javax.swing.JPanel pnlActionsButton;
+    private javax.swing.JProgressBar progEnemyHPBar;
+    private javax.swing.JProgressBar progEnemyManaBar;
+    private javax.swing.JProgressBar progPlayerHPBar;
+    private javax.swing.JProgressBar progPlayerManaBar;
+    private javax.swing.JScrollPane terminalScrollPane;
     private javax.swing.JTextArea txtAreaBattlePanel;
     // End of variables declaration//GEN-END:variables
 }

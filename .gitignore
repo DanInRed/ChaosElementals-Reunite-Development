@@ -26,6 +26,8 @@ nbproject/private/
 nbproject/genfiles.properties
 nbproject/ant-deploy.xml    
 
+!lib/AbsoluteLayout.jar
+
 # --- IDE Config Files ---
 # These are usually specific to your local setup (e.g., which file you had open last)
 nbactions.xml
