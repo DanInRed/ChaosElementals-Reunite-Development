@@ -31,4 +31,16 @@ public class UIUpdater {
             bar.setForeground(new Color(34, 139, 34)); // A nice Forest Green
         }
     }
+    
+    public static void refreshManaBar(JProgressBar bar, CharacterHolder character){
+        int current = (int)character.getCurrentMana();
+        int max = (int)character.getMana().getMaxMana();
+        
+        bar.setMinimum(0);
+        bar.setMaximum(max);
+        bar.setValue(current);
+        
+        bar.setForeground(Color.BLUE);
+        
+    }
 }
