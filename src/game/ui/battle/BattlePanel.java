@@ -78,7 +78,7 @@ public class BattlePanel extends javax.swing.JPanel {
         lblAttackTypes = new javax.swing.JLabel();
         lblPlayerHP = new javax.swing.JLabel();
         lblEnemyHP = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        progPlayerHPBar = new javax.swing.JProgressBar();
         jProgressBar2 = new javax.swing.JProgressBar();
         lblEnemyTakeDamage = new javax.swing.JLabel();
         lblPlayerTakeDamage = new javax.swing.JLabel();
@@ -154,7 +154,7 @@ public class BattlePanel extends javax.swing.JPanel {
 
         lblEnemyHP.setText("Health:");
 
-        jProgressBar1.setForeground(new java.awt.Color(255, 0, 0));
+        progPlayerHPBar.setForeground(new java.awt.Color(255, 0, 0));
 
         jProgressBar2.setForeground(new java.awt.Color(255, 0, 0));
 
@@ -199,7 +199,7 @@ public class BattlePanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblPlayerHP, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(progPlayerHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblPlayerTakeDamage, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, Short.MAX_VALUE)
@@ -247,7 +247,7 @@ public class BattlePanel extends javax.swing.JPanel {
                         .addComponent(lblEnemyIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(progPlayerHPBar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblPlayerHP))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -315,6 +315,7 @@ public class BattlePanel extends javax.swing.JPanel {
         // 2. Create a timer (1.5 seconds delay)
         javax.swing.Timer enemyTimer = new javax.swing.Timer(1500, e -> {
             // Logic from your terminal simulator
+            //TODO Attack randomizer
             AttackType enemyMove = AttackType.NORMAL; // You can add your random logic here later
             double dmg = DamageCalculator.calculateDamage(activeEnemy, player, enemyMove);
 
@@ -345,7 +346,7 @@ public class BattlePanel extends javax.swing.JPanel {
     
     private void refreshStats() {
         // Utilizing the engine //TODO
-        UIUpdater.refreshHealthBar(jProgressBar1, player);
+        UIUpdater.refreshHealthBar(progPlayerHPBar, player);
         UIUpdater.refreshHealthBar(jProgressBar2, activeEnemy);
 
         lblPlayerHP.setText("HP: " + (int)player.getCurrentHealth() + "/" + (int)player.getHP().getMaxHP());
@@ -405,7 +406,6 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnSkill1;
     private javax.swing.JButton btnSkill2;
     private javax.swing.JButton btnUltimate;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAttackTypes;
@@ -420,6 +420,7 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblPlayerTakeDamage;
     private javax.swing.JLabel lblVS;
     private javax.swing.JPanel pnlActionsButton;
+    private javax.swing.JProgressBar progPlayerHPBar;
     private javax.swing.JTextArea txtAreaBattlePanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -57,7 +57,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="lblPlayerHP" min="-2" pref="72" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jProgressBar1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="progPlayerHPBar" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="lblPlayerTakeDamage" min="-2" pref="78" max="-2" attributes="0"/>
@@ -124,7 +124,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jProgressBar1" min="-2" pref="16" max="-2" attributes="0"/>
+                          <Component id="progPlayerHPBar" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblPlayerHP" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -335,7 +335,7 @@
         <Property name="text" type="java.lang.String" value="Health:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JProgressBar" name="jProgressBar1">
+    <Component class="javax.swing.JProgressBar" name="progPlayerHPBar">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="ff" type="rgb"/>
