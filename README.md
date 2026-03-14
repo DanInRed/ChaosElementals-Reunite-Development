@@ -25,6 +25,10 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 - `src/types`: This contains AttackType and ElementType in enums
 
 
+## BackEnd File
+- location `src.game.01_BackEnd_Docs`
+- Base Stats [BaseStats] (01_BackEnd_Docs/BaseStats.md)
+
 ## Contributing
 - Do not push directly to `main`.
 - Create a new branch for your GUI features.
