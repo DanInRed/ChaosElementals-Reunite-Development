@@ -27,7 +27,7 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 
 ## BackEnd File
 - location `src.game.01_BackEnd_Docs`
-- Base Stats [BaseStats] (01_BackEnd_Docs/BaseStats.md)
+- Base Stats [BaseStats](src/game/01_BackEnd_Docs/BaseStats.md)
 
 ## Contributing
 - Do not push directly to `main`.
