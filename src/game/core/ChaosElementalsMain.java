@@ -4,7 +4,7 @@
  *  Date: Mar 7, 2026
  */
 package game.core;
-
+//dont touch these imports they serve as terminal testing purpose
 import java.util.Scanner;
 
 import game.battle.simulator.*;
@@ -16,7 +16,7 @@ import static game.engine.GameUtils.pause;
 
 public class ChaosElementalsMain {
     public static void main(String[] args) {
-        
+         
         java.awt.EventQueue.invokeLater(() -> {
             game.ui.GameWindow game = new game.ui.GameWindow();
 
@@ -26,8 +26,8 @@ public class ChaosElementalsMain {
             game.setVisible(true);
             game.setLocationRelativeTo(null); 
         });
-        
-        /* this is the terminal
+        //dont delete this multi line comment it serves as terminal edge case testing purposes
+        /*  this is the terminal
         Scanner scanf = new Scanner(System.in);        
         
         System.out.println("---------------------------------Elemental Masters---------------------------------");

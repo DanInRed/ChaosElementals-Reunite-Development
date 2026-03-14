@@ -92,44 +92,45 @@ public class SimulateBattle{
         
         // Randomly pick an attack for the enemy
         
-        int choice;
-        AttackType enemyMove;
-        double dmg;
+        // 1. Initial Random Choice
+    int choice = rand.nextInt(AttackType.values().length);
+        AttackType enemyMove = AttackType.values()[choice];
         boolean isSweating = false;
-        int retryLimit = 2; //this is for the enemy "sweating" logic to retry (choice - 1) until it reach the valid skill compatible to currentMana <= manaCost
-        int attempts = 0;//enemy can now utilize mana usage
-        while(true){
-            choice = rand.nextInt(AttackType.values().length);
-            enemyMove = AttackType.values()[choice];
-        
-            simulateManaCost = new SimulateManaCost(choice, enemy, enemyMove);
-            dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
 
-                if(simulateManaCost.isChoiceValid(choice, enemy, enemyMove)){
-                    enemy.setAttackType(enemyMove);
-                    pause(1000);
-                    enemy.manaCost(simulateManaCost.getManaNeeded());
-                    pause(1000);
-                    //doesnt sweat if mana is valid
-                    break;
-                }else{
-                    if(!isSweating){
-                        System.out.println(enemy.getName() + " is Sweating!");
-                        System.out.println("Reconsiders using another Skill...");
-                    }
+        // 2. The Validation/Search Loop
+        while (true) {
+            simulateManaCost = new SimulateManaCost(choice, enemy, enemyMove);
+
+            if (simulateManaCost.isChoiceValid(choice, enemy, enemyMove)) {
+                // ACTION GRANTED: Move is affordable
+                enemy.setAttackType(enemyMove);
+                pause(1000);
+                enemy.manaCost(simulateManaCost.getManaNeeded());
+                pause(1000);
+                break; // Exit the loop to deal damage
+            } else {
+                // ACTION DENIED: Start "Sweating" search
+                if (!isSweating) {
+                    System.out.println("\n" + enemy.getName() + " is Sweating!");
+                    System.out.println("Reconsiders using another Skill...");
                     isSweating = true;
                 }
 
-                attempts++;
-
-                if (attempts >= retryLimit || choice > 0) { // this ensures limited "sweating" loop
-                    choice = Math.max(0, choice - 1); 
+                // Systematic Search: Lower the choice until it hits 0 (Physical Attack)
+                if (choice > 0) {
+                    choice--; 
+                    enemyMove = AttackType.values()[choice];
+                    // The loop repeats, re-checking simulateManaCost for the new choice
                 } else {
-                 // Otherwise, just pick another random one to try again
-                choice = rand.nextInt(AttackType.values().length);
+                    // Safety break: If choice is already 0, something is wrong with the 
+                    // mana cost of the basic attack (it should be 0).
+                    break; 
+                }
+            }
         }
-        }
-        
+
+        // 3. Execution
+        double dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
         player.takeDamage(dmg);
         System.out.println("Enemy used " + enemyMove + "! Dealt: " + dmg);
         round++;
