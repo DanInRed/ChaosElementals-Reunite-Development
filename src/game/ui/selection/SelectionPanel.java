@@ -31,7 +31,7 @@ public class SelectionPanel extends javax.swing.JPanel {
         lblSelectionPanel = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(1280, 960));
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         lblSelectionPanel.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         lblSelectionPanel.setText("SELECTION PANEL");

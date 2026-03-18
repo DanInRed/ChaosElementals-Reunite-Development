@@ -32,8 +32,9 @@ public class SplashPanel extends javax.swing.JPanel {
         lblChaosElementalsReunite = new javax.swing.JLabel();
         lblClickToContinue = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1280, 960));
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         lblSplashPanel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSplashPanel.setText("SPLASHPANEL");
