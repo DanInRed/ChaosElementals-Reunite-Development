@@ -30,8 +30,9 @@ public class ResultPanel extends javax.swing.JPanel {
 
         lblResultPanel = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(1280, 960));
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         lblResultPanel.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         lblResultPanel.setText("RESULT PANEL");

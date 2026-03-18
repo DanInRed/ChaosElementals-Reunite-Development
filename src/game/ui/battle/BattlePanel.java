@@ -87,9 +87,9 @@ public class BattlePanel extends javax.swing.JPanel {
         lblEnemyMana = new javax.swing.JLabel();
         progEnemyManaBar = new javax.swing.JProgressBar();
 
-        setMaximumSize(new java.awt.Dimension(1280, 960));
-        setMinimumSize(new java.awt.Dimension(1280, 960));
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblBattlePanel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N

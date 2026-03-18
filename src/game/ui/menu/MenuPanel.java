@@ -52,9 +52,9 @@ public class MenuPanel extends javax.swing.JPanel {
         btnSettings = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(1280, 960));
-        setMinimumSize(new java.awt.Dimension(1280, 960));
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         lblMenuPanel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblMenuPanel.setText("MENU PANEL");

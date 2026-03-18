@@ -55,8 +55,9 @@ public class GameWindow extends javax.swing.JFrame {
         lblTitle = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1280, 960));
-        setMinimumSize(new java.awt.Dimension(1280, 960));
+        setMaximumSize(new java.awt.Dimension(1280, 720));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
         lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N

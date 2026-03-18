@@ -33,7 +33,7 @@ public class LoadingPanel extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1920, 960));
         setMinimumSize(new java.awt.Dimension(1280, 960));
         setName(""); // NOI18N
-        setPreferredSize(new java.awt.Dimension(1280, 960));
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         lblLoadingPanel.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         lblLoadingPanel.setText("LOADING PANEL");
