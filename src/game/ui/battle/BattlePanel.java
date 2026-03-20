@@ -10,53 +10,103 @@ import game.types.AttackType;
 import game.character.holder.CharacterHolder;
 import game.battle.simulator.SimulateBattle;
 import game.battle.simulator.SimulateManaCost;
+import game.battle.state.BattleState;
 import game.engine.DamageCalculator;
 import game.ui.battle.engine.UIUpdater;
 import game.ui.battle.engine.IconLoader;
 import game.ui.battle.engine.DamageAnimation;
 import game.ui.battle.engine.CombatLog;
+import game.battle.logic.BattleController;
 /**
  *
  * @author Dash
  */
-public class BattlePanel extends javax.swing.JPanel {
-    private CharacterHolder activeEnemy;
-    private CharacterHolder player;
+public class BattlePanel extends javax.swing.JPanel implements BattleView{
+    private BattleState state;
+    private BattleController controller;
     SimulateManaCost simulateManaCost;
     private CombatLog terminalLog;
     private SimulateBattle simulator; // The Bridge
     /**
      * Creates new form BattlePanel
+     * @param player
+     * @param enemy
      */
     public BattlePanel(CharacterHolder player, CharacterHolder enemy) {
-        this.player = player;
-        this.activeEnemy = enemy;
-        this.simulator = new SimulateBattle(); // Initialize logic
-        
-        initComponents(); // 1. Create the UI objects
-        lblPlayerTakeDamage.setVisible(false); //blinking damage receive animation
-        lblEnemyTakeDamage.setVisible(false); //
-        setupIcons();    // 2. Load the images into those objects currently not working
-        
-        
-        // 1. Setup UI labels with the actual data
+        // 1. DATA FIRST: Create the state so logic has a foundation
+        this.state = new BattleState(player, enemy);
+        this.simulator = new SimulateBattle(); 
+
+        // 2. UI OBJECTS for netbeans 
+        initComponents(); 
+
+        // 3. UI TWEAKS: Hide elements that only show during animations
+        lblPlayerTakeDamage.setVisible(false);
+        lblEnemyTakeDamage.setVisible(false);
+
+        // 4. THE LOG: Must be created AFTER initComponents so txtAreaBattlePanel exists
+        this.terminalLog = new CombatLog(txtAreaBattlePanel);
+
+        // 5. THE BRAIN: Connect the Controller last, passing 'this' as the View
+        this.controller = new BattleController(state, terminalLog, this);
+
+        // 6. ASSETS & LABELS: Fill the UI with data and images
+        setupIcons();
         lblPlayerName.setText(player.getName() + " (" + player.getElementType() + ")");
         lblEnemyName.setText(enemy.getName() + " (" + enemy.getElementType() + ")");
-        
-        refreshStats(); //Show initial HP values for both player and enemy
-        
-        // Set up the txtAreaBattlePanel to look like a terminal
+
+        // 7. SYNC: Final refresh to show the 100% HP/Mana bars
+        refreshStats(); 
+
+        // 8. CONFIG: Final terminal settings
         txtAreaBattlePanel.setEditable(false);
         txtAreaBattlePanel.setLineWrap(true);
         txtAreaBattlePanel.setWrapStyleWord(true);
 
-       this.terminalLog = new CombatLog(txtAreaBattlePanel);
-       
-       // 3. Welcome Message
-       terminalLog.log("A duel begins: " + player.getName() + " vs " + enemy.getName());
-       terminalLog.log("Choose an attack!");
-        
+        // 9. STARTUP MESSAGE
+        terminalLog.log("A duel begins: " + player.getName() + " vs " + enemy.getName());
+        terminalLog.log("Choose an attack!");
     }   
+    
+
+    @Override 
+    public void setControlsEnabled(boolean enabled) {
+        btnNormal.setEnabled(enabled);
+        btnSkill1.setEnabled(enabled);
+        btnSkill2.setEnabled(enabled);
+        btnUltimate.setEnabled(enabled);
+        // Note: updateActionButtons() logic here too maybe below this method setControlsEnabled!
+    }
+    
+    @Override 
+    public void updateUI() {
+        // Safety Guard: If state is null, stop immediately
+        if (state == null) return;
+        
+        // 1. Update the bars and text labels
+        refreshStats();
+
+        // 2. Logic-based button enabling
+        // We only call this if it's the player's turn (controls are enabled)
+        if (btnNormal.isEnabled()) {
+            updateActionButtons();
+        }
+
+        // 3. Ensure the UI actually repaints
+        this.revalidate();
+        this.repaint();
+    }
+    
+    @Override
+    public void playDamageAnimation(boolean isPlayer, double damage) {
+        if (isPlayer) {
+            // The player is the target (Enemy attacked)
+            DamageAnimation.showDamageAnimation(lblPlayerTakeDamage, lblPlayerIcon, damage);
+        } else {
+            // The enemy is the target (Player attacked)
+            DamageAnimation.showDamageAnimation(lblEnemyTakeDamage, lblEnemyIcon, damage);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -250,88 +300,70 @@ public class BattlePanel extends javax.swing.JPanel {
     
     private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
         //handleAttack(AttackType.NORMAL); updated now that manaValidator Method exists
-        manaValidator(0, player, AttackType.NORMAL);
+        controller.handlePlayerInput(0, AttackType.NORMAL);
     }//GEN-LAST:event_btnNormalActionPerformed
 
     private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
         //handleAttack(AttackType.SKILL_1); 
-        manaValidator(1, player, AttackType.SKILL_1);
+        controller.handlePlayerInput(1, AttackType.SKILL_1);
     }//GEN-LAST:event_btnSkill1ActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
         //handleAttack(AttackType.SKILL_2);
-        manaValidator(2, player, AttackType.SKILL_2);
+        controller.handlePlayerInput(2, AttackType.SKILL_2);
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
     private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
         //handleAttack(AttackType.ULTIMATE);
-        manaValidator(3, player, AttackType.ULTIMATE);
+        controller.handlePlayerInput(3, AttackType.ULTIMATE);
     }//GEN-LAST:event_btnUltimateActionPerformed
-   
-    private void manaValidator(int choice, CharacterHolder character, AttackType selectedAttack) {
-        simulateManaCost = new SimulateManaCost(choice, character, selectedAttack);
-
-        if (simulateManaCost.isChoiceValid(choice, character, selectedAttack)) {
-            // Spend Mana
-            player.manaCost(simulateManaCost.getManaNeeded());
-
-            // Disable all buttons immediately to prevent "double clicking" 
-            // while the animation plays
-            setButtonsEnabled(false); 
-
-            handleAttack(selectedAttack);
-        } else {
-            // This part technically shouldn't be reachable if buttons are disabled,
-            // but it's good for debugging!
-            terminalLog.log("Mana check failed for " + selectedAttack);
-        }
-    }
+    //TODO manaValidator moved to BattleController.java located at src.game.battle.logic
     
     //Replaced the String parameter and method is now handleAttack
-    private void handleAttack(AttackType type) {
+    /*private void handleAttack(AttackType type) {
         // 0. Before accepting attacks it must satisfy currentMana >= manaCost
         // 1. Calculate Damage using your existing engine
-        double dmg = DamageCalculator.calculateDamage(player, activeEnemy, type);
+        double dmg = DamageCalculator.calculateDamage(state.getPlayer(), state.getEnemy(), type);
 
         // 2. Apply Damage to the Object
-        activeEnemy.takeDamage(dmg);
+        state.getEnemy().takeDamage(dmg);
 
         // 3. Update the UI
-        terminalLog.log(player.getName() + " used " + type + "!");
+        terminalLog.log(state.getPlayer().getName() + " used " + type + "!");
         terminalLog.log("Dealt " + (int)dmg + " damage!");
         DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,dmg);//method damage receive animation
         refreshStats();
 
         // 4. Check for Win or Enemy Counter
-        if (!activeEnemy.isAlive()) {
-            terminalLog.log("VICTORY! " + activeEnemy.getName() + " fainted.");
+        if (!state.getEnemy().isAlive()) {
+            terminalLog.log("VICTORY! " + state.getEnemy().getName() + " fainted.");
             endBattle();
         } else {
             startEnemyTurnTimer();
         }
-    }
+    }*/
     
-    private void startEnemyTurnTimer() {
+    /*private void startEnemyTurnTimer() {
         // 1. Disable buttons so the player can't attack twice!
-        setButtonsEnabled(false);
+        setControlsEnabled(false);
 
         // 2. Create a timer (1.5 seconds delay)
         javax.swing.Timer enemyTimer = new javax.swing.Timer(1500, e -> {
             // Logic from your terminal simulator
             AttackType enemyMove = AttackType.NORMAL; // You can add your random logic here later
-            double dmg = DamageCalculator.calculateDamage(activeEnemy, player, enemyMove);
+            double dmg = DamageCalculator.calculateDamage(state.getEnemy(), state.getPlayer(), enemyMove);
 
             // Update Backend
-            player.takeDamage(dmg);
+            state.getPlayer().takeDamage(dmg);
 
             // Update UI
-            terminalLog.log(activeEnemy.getName() + " attacks with " + enemyMove + "!");
+            terminalLog.log(state.getEnemy().getName() + " attacks with " + enemyMove + "!");
             terminalLog.log("You took " + (int)dmg + " damage.");
             DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,dmg);
             refreshStats();
 
             // 3. Check if player survived
-            if (!player.isAlive()) {
+            if (!state.getPlayer().isAlive()) {
                 terminalLog.log("DEFEAT... You have fallen.");
                 endBattle();
             } else {
@@ -345,54 +377,50 @@ public class BattlePanel extends javax.swing.JPanel {
 
         enemyTimer.setRepeats(false); // Only run once
         enemyTimer.start();
-    }
+    }*/
     
-    
+    //TODO move the refreshStats() to UIUpdater.java located at src.game.ui.battle.engine
     private void refreshStats() {
-        // Utilizing the engine //TODO
-        UIUpdater.refreshHealthBar(progPlayerHPBar, player);
-        UIUpdater.refreshHealthBar(progEnemyHPBar, activeEnemy);
-        UIUpdater.refreshManaBar(progPlayerManaBar, player);
-        UIUpdater.refreshManaBar(progEnemyManaBar, activeEnemy); 
-        lblPlayerHP.setText("HP: " + (int)player.getCurrentHealth() + "/" + (int)player.getHP().getMaxHP());
-        lblEnemyHP.setText("HP: " + (int)activeEnemy.getCurrentHealth() + "/" + (int)activeEnemy.getHP().getMaxHP());
-        lblPlayerMana.setText("Mana: " + (int)player.getCurrentMana() + "/" + (int)player.getMana().getMaxMana());
-        lblEnemyMana.setText("Mana: " + (int)activeEnemy.getCurrentMana() + "/" + (int)activeEnemy.getMana().getMaxMana());
-        // updateActionButtons(); called after startEnemyTurnTimer
+        //Safety Guard: Don't try to pull data from a null state
+        if (state == null || state.getPlayer() == null) return;
+        
+        // Update Player Visuals    
+        UIUpdater.refreshHealthBar(progPlayerHPBar, state.getPlayer());
+        UIUpdater.refreshManaBar(progPlayerManaBar, state.getPlayer());
+        UIUpdater.updateLabels(lblPlayerHP, lblPlayerMana, state.getPlayer());
+
+        // Update Enemy Visuals
+        UIUpdater.refreshHealthBar(progEnemyHPBar, state.getEnemy());
+        UIUpdater.refreshManaBar(progEnemyManaBar, state.getEnemy());
+        UIUpdater.updateLabels(lblEnemyHP, lblEnemyMana, state.getEnemy());
     }
     
     private void setupIcons() {
         // Player Icon
-        System.out.println("Looking for: " + player.getIconPath());
-        java.net.URL testURL = getClass().getResource(player.getIconPath());
+        System.out.println("Looking for: " + state.getPlayer().getIconPath());
+        java.net.URL testURL = getClass().getResource(state.getPlayer().getIconPath());
         System.out.println("Found it? " + (testURL != null));
         
-        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(this, player.getIconPath(), 192));
+        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(this, state.getPlayer().getIconPath(), 192));
         lblPlayerIcon.setText("");
 
         // Enemy Icon
-        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(this, activeEnemy.getIconPath(), 192));
+        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(this, state.getEnemy().getIconPath(), 192));
         lblEnemyIcon.setText("");
     }
     //UpdateBarColor has been moved to UIUpdater.java and is now called updateHealthBar
     
     private void endBattle() {
-        setButtonsEnabled(false);
+        setControlsEnabled(false);
 
         // Using your JOptionPane trick from earlier!
-        String winner = player.isAlive() ? "Victory!" : "Defeat...";
+        String winner = state.getPlayer().isAlive() ? "Victory!" : "Defeat...";
         javax.swing.JOptionPane.showMessageDialog(this, "The battle is over: " + winner);
 
         // TODO: Add code here to switch back to your Main Menu or Map
 }
 
-    // Helper method to keep code clean
-    private void setButtonsEnabled(boolean enabled) {//simulate toggling on after enemy turn
-        btnNormal.setEnabled(enabled);
-        btnSkill1.setEnabled(enabled);
-        btnSkill2.setEnabled(enabled);
-        btnUltimate.setEnabled(enabled);
-    }
+    // setButtonsEnabled method is now moved to BattleView.java located at game.ui.battle
     
     private void updateActionButtons() {
         // We check the mana cost for each skill via SimulateManaCost
@@ -405,8 +433,8 @@ public class BattlePanel extends javax.swing.JPanel {
     
     // Helper method to keep the logic clean
     private boolean canAfford(int choice, AttackType type) {
-        SimulateManaCost check = new SimulateManaCost(choice, player, type);
-        return check.isChoiceValid(choice, player, type);
+        SimulateManaCost check = new SimulateManaCost(choice, state.getPlayer(), type);
+        return check.isChoiceValid(choice, state.getPlayer(), type);
     }
      
     //logToPanel moved to CombatLog.java in src.game.ui.battle.engine

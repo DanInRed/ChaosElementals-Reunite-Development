@@ -20,29 +20,29 @@ public class GameWindow extends javax.swing.JFrame {
      * Creates new form GameWindow
      */
     public GameWindow() {
-        // 1. Let NetBeans build the basic frame
-            initComponents(); 
+            // 1. Let NetBeans init the basics (Title bar, close operation, etc.)
+        initComponents(); 
 
-            // 2. Set the starting view FIRST
-            setView(new game.ui.splash.SplashPanel());
-            pack();
-            // 3. THE FIX: Tell the Frame to grow to fit the Panel's 1020x680 size
-            // pack() calculates the Title Bar height and adds it automatically
-            //this.pack(); //i already have set the fixed size to 4:3 ration hardcoded 1280 * 960 
+        // 2. Clear out the lblTitle NetBeans added so it doesn't stay in memory
+        this.getContentPane().removeAll(); 
 
-            // 4. Center it AFTER packing (so it's centered based on the final size)
-            this.setLocationRelativeTo(null); 
+        // 3. Set the starting view
+        setView(new game.ui.splash.SplashPanel());
 
-            // 5. Add your transition listener
-            this.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mousePressed(java.awt.event.MouseEvent e) {
-                    setView(new MenuPanel()); 
-                    removeMouseListener(this);
-                }
-            });
+        // 4. Final Frame adjustments
+        this.pack();
+        this.setLocationRelativeTo(null); 
+
+        // 5. Transition to Menu
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                setView(new MenuPanel()); 
+                removeMouseListener(this);
+            }
+        });
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,13 +86,21 @@ public class GameWindow extends javax.swing.JFrame {
 
     
     
-        public void setView(javax.swing.JPanel newPanel) {
-            getContentPane().removeAll();
-            getContentPane().setLayout(new java.awt.BorderLayout());
-            getContentPane().add(newPanel, java.awt.BorderLayout.CENTER); // Add CENTER here
-            getContentPane().revalidate();
-            getContentPane().repaint();
-        }
+    public void setView(javax.swing.JPanel newPanel) {
+        // 1. Clear everything
+        this.getContentPane().removeAll();
+
+        // 2. Force a clean layout for the new panel
+        this.getContentPane().setLayout(new java.awt.BorderLayout());
+        this.getContentPane().add(newPanel, java.awt.BorderLayout.CENTER);
+
+        // 3. Re-render
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
+        
+        // 4. Focus management (important for key listeners)
+        newPanel.requestFocusInWindow();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables

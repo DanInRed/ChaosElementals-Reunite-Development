@@ -43,4 +43,16 @@ public class UIUpdater {
         bar.setForeground(Color.BLUE);
         
     }
+    
+    public static void updateLabels(javax.swing.JLabel lblHp, javax.swing.JLabel lblMana, CharacterHolder character) {
+        int currHP = (int) character.getCurrentHealth();
+        int maxHP = (int) character.getHP().getMaxHP();
+        int currMana = (int) character.getCurrentMana();
+        int maxMana = (int) character.getMana().getMaxMana();
+        
+        lblHp.setText("HP: " + currHP + "/" + maxHP);
+        lblMana.setText("Mana: " + currMana + "/" + maxMana);
+        // updateActionButtons(); called after startEnemyTurnTimer
+    }
+
 }
