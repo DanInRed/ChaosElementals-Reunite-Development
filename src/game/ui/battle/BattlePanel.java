@@ -9,6 +9,7 @@ package game.ui.battle;
 import game.types.AttackType;
 import game.character.holder.CharacterHolder;
 import game.battle.simulator.SimulateBattle;
+import game.battle.simulator.SimulateManaCost;
 import game.engine.DamageCalculator;
 import game.ui.battle.engine.UIUpdater;
 import game.ui.battle.engine.IconLoader;
@@ -21,6 +22,7 @@ import game.ui.battle.engine.DamageAnimation;
 public class BattlePanel extends javax.swing.JPanel {
     private CharacterHolder activeEnemy;
     private CharacterHolder player;
+    SimulateManaCost simulateManaCost;
     private SimulateBattle simulator; // The Bridge
     /**
      * Creates new form BattlePanel
@@ -244,22 +246,47 @@ public class BattlePanel extends javax.swing.JPanel {
 
     
     private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
-        handleAttack(AttackType.NORMAL);
+        //handleAttack(AttackType.NORMAL); updated now that manaValidator Method exists
+        manaValidator(0, player, AttackType.NORMAL);
     }//GEN-LAST:event_btnNormalActionPerformed
 
     private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
-        handleAttack(AttackType.SKILL_1);
+        //handleAttack(AttackType.SKILL_1); 
+        manaValidator(1, player, AttackType.SKILL_1);
     }//GEN-LAST:event_btnSkill1ActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
-        handleAttack(AttackType.SKILL_2);
+        //handleAttack(AttackType.SKILL_2);
+        manaValidator(2, player, AttackType.SKILL_2);
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
     private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
-        handleAttack(AttackType.ULTIMATE);
+        //handleAttack(AttackType.ULTIMATE);
+        manaValidator(3, player, AttackType.ULTIMATE);
     }//GEN-LAST:event_btnUltimateActionPerformed
+   
+    private void manaValidator(int choice, CharacterHolder character, AttackType selectedAttack) {
+        simulateManaCost = new SimulateManaCost(choice, character, selectedAttack);
+
+        if (simulateManaCost.isChoiceValid(choice, character, selectedAttack)) {
+            // Spend Mana
+            player.manaCost(simulateManaCost.getManaNeeded());
+
+            // Disable all buttons immediately to prevent "double clicking" 
+            // while the animation plays
+            setButtonsEnabled(false); 
+
+            handleAttack(selectedAttack);
+        } else {
+            // This part technically shouldn't be reachable if buttons are disabled,
+            // but it's good for debugging!
+            logToPanel("Mana check failed for " + selectedAttack);
+        }
+    }
+    
     //Replaced the String parameter and method is now handleAttack
     private void handleAttack(AttackType type) {
+        // 0. Before accepting attacks it must satisfy currentMana >= manaCost
         // 1. Calculate Damage using your existing engine
         double dmg = DamageCalculator.calculateDamage(player, activeEnemy, type);
 
@@ -306,7 +333,9 @@ public class BattlePanel extends javax.swing.JPanel {
                 endBattle();
             } else {
                 // Re-enable buttons for the player's next turn
-                setButtonsEnabled(true);
+                
+                btnNormal.setEnabled(true); // Normal is always free
+                updateActionButtons();      // This will selectively enable Skill1, Skill2, Ult
                 logToPanel("Your turn!");
             }
         });
@@ -321,11 +350,12 @@ public class BattlePanel extends javax.swing.JPanel {
         UIUpdater.refreshHealthBar(progPlayerHPBar, player);
         UIUpdater.refreshHealthBar(progEnemyHPBar, activeEnemy);
         UIUpdater.refreshManaBar(progPlayerManaBar, player);
-        UIUpdater.refreshManaBar(progEnemyManaBar, activeEnemy);
+        UIUpdater.refreshManaBar(progEnemyManaBar, activeEnemy); 
         lblPlayerHP.setText("HP: " + (int)player.getCurrentHealth() + "/" + (int)player.getHP().getMaxHP());
         lblEnemyHP.setText("HP: " + (int)activeEnemy.getCurrentHealth() + "/" + (int)activeEnemy.getHP().getMaxHP());
         lblPlayerMana.setText("Mana: " + (int)player.getCurrentMana() + "/" + (int)player.getMana().getMaxMana());
         lblEnemyMana.setText("Mana: " + (int)activeEnemy.getCurrentMana() + "/" + (int)activeEnemy.getMana().getMaxMana());
+        // updateActionButtons(); called after startEnemyTurnTimer
     }
     
     private void setupIcons() {
@@ -361,6 +391,21 @@ public class BattlePanel extends javax.swing.JPanel {
         btnUltimate.setEnabled(enabled);
     }
     
+    private void updateActionButtons() {
+        // We check the mana cost for each skill via SimulateManaCost
+        // Note: Normal attack (choice 0) is usually 0 mana, so it stays enabled.
+
+        btnSkill1.setEnabled(canAfford(1, AttackType.SKILL_1));
+        btnSkill2.setEnabled(canAfford(2, AttackType.SKILL_2));
+        btnUltimate.setEnabled(canAfford(3, AttackType.ULTIMATE));
+    }
+    
+    // Helper method to keep the logic clean
+    private boolean canAfford(int choice, AttackType type) {
+        SimulateManaCost check = new SimulateManaCost(choice, player, type);
+        return check.isChoiceValid(choice, player, type);
+    }
+     
     private void logToPanel(String text) { //acting terminal
         int width = 25; 
         int padding = Math.max(0, (width - text.length()) / 2);
