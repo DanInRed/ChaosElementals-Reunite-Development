@@ -14,7 +14,7 @@ import game.engine.DamageCalculator;
 import game.ui.battle.engine.UIUpdater;
 import game.ui.battle.engine.IconLoader;
 import game.ui.battle.engine.DamageAnimation;
-
+import game.ui.battle.engine.CombatLog;
 /**
  *
  * @author Dash
@@ -23,6 +23,7 @@ public class BattlePanel extends javax.swing.JPanel {
     private CharacterHolder activeEnemy;
     private CharacterHolder player;
     SimulateManaCost simulateManaCost;
+    private CombatLog terminalLog;
     private SimulateBattle simulator; // The Bridge
     /**
      * Creates new form BattlePanel
@@ -44,15 +45,17 @@ public class BattlePanel extends javax.swing.JPanel {
         
         refreshStats(); //Show initial HP values for both player and enemy
         
-        // Set up the JTextArea to look like a terminal
+        // Set up the txtAreaBattlePanel to look like a terminal
         txtAreaBattlePanel.setEditable(false);
         txtAreaBattlePanel.setLineWrap(true);
         txtAreaBattlePanel.setWrapStyleWord(true);
 
+       this.terminalLog = new CombatLog(txtAreaBattlePanel);
+       
+       // 3. Welcome Message
+       terminalLog.log("A duel begins: " + player.getName() + " vs " + enemy.getName());
+       terminalLog.log("Choose an attack!");
         
-        // 3. Welcome Message
-        logToPanel("A duel begins: " + player.getName() + " vs " + enemy.getName());
-        logToPanel("Choose an attack!");
     }   
     
     /**
@@ -280,7 +283,7 @@ public class BattlePanel extends javax.swing.JPanel {
         } else {
             // This part technically shouldn't be reachable if buttons are disabled,
             // but it's good for debugging!
-            logToPanel("Mana check failed for " + selectedAttack);
+            terminalLog.log("Mana check failed for " + selectedAttack);
         }
     }
     
@@ -294,14 +297,14 @@ public class BattlePanel extends javax.swing.JPanel {
         activeEnemy.takeDamage(dmg);
 
         // 3. Update the UI
-        logToPanel(player.getName() + " used " + type + "!");
-        logToPanel("Dealt " + (int)dmg + " damage!");
+        terminalLog.log(player.getName() + " used " + type + "!");
+        terminalLog.log("Dealt " + (int)dmg + " damage!");
         DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,dmg);//method damage receive animation
         refreshStats();
 
         // 4. Check for Win or Enemy Counter
         if (!activeEnemy.isAlive()) {
-            logToPanel("VICTORY! " + activeEnemy.getName() + " fainted.");
+            terminalLog.log("VICTORY! " + activeEnemy.getName() + " fainted.");
             endBattle();
         } else {
             startEnemyTurnTimer();
@@ -322,21 +325,21 @@ public class BattlePanel extends javax.swing.JPanel {
             player.takeDamage(dmg);
 
             // Update UI
-            logToPanel(activeEnemy.getName() + " attacks with " + enemyMove + "!");
-            logToPanel("You took " + (int)dmg + " damage.");
+            terminalLog.log(activeEnemy.getName() + " attacks with " + enemyMove + "!");
+            terminalLog.log("You took " + (int)dmg + " damage.");
             DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,dmg);
             refreshStats();
 
             // 3. Check if player survived
             if (!player.isAlive()) {
-                logToPanel("DEFEAT... You have fallen.");
+                terminalLog.log("DEFEAT... You have fallen.");
                 endBattle();
             } else {
                 // Re-enable buttons for the player's next turn
                 
                 btnNormal.setEnabled(true); // Normal is always free
                 updateActionButtons();      // This will selectively enable Skill1, Skill2, Ult
-                logToPanel("Your turn!");
+                terminalLog.log("Your turn!");
             }
         });
 
@@ -406,21 +409,10 @@ public class BattlePanel extends javax.swing.JPanel {
         return check.isChoiceValid(choice, player, type);
     }
      
-    private void logToPanel(String text) { //acting terminal
-        int width = 25; 
-        int padding = Math.max(0, (width - text.length()) / 2);
-
-        StringBuilder centeredText = new StringBuilder();
-        for (int i = 0; i < padding; i++) {
-            centeredText.append(" ");
-        }
-
-        txtAreaBattlePanel.append(centeredText.toString() + text + "\n");
-
-        // This moves the "cursor" to the very end of the text
-        txtAreaBattlePanel.setCaretPosition(txtAreaBattlePanel.getDocument().getLength());
-    }
+    //logToPanel moved to CombatLog.java in src.game.ui.battle.engine
+    
     //showDamageAnimation method moved to DamageAnimation.java
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNormal;
     private javax.swing.JButton btnSkill1;
