@@ -31,8 +31,13 @@ public class SimulateBattle{
      * Processes the logic and returns the result for the UI to display.
      */
     public TurnResult executePlayerTurn(CharacterHolder player, CharacterHolder enemy, AttackType type){
-        // 0. if ever we implement the "stun", "freezed" and "miss" 
-        //logic it should be the first and the first to trigger and will return to enemyturn immediately  
+        /* 0. if ever we implement the "stun", "freezed" and "miss" 
+        logic it should be the first and the first to trigger and will return to enemyturn immediately  
+        1. Status Check (The "Gatekeeper")
+            if (player.hasStatus("FREEZE") || player.hasStatus("STUN")) {
+                return new TurnResult(player.getName() + " is frozen and cannot move!", 0, type, false);
+            }
+        */
         // 1. Calculate Damage using your existing engine
         double dmg = DamageCalculator.calculateDamage(player, enemy, type);
 

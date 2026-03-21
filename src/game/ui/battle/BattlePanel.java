@@ -354,6 +354,11 @@ public class BattlePanel extends javax.swing.JPanel {
             // Logic from terminal simulator
             TurnResult result = simulator.executeEnemyTurn(activeEnemy, player);
             
+            /*if (result.isWasSweating()) { //for implementation of "Sweating" icon
+                // This is where collaborators can plug in the "Sweating" UI effect
+                UIUpdater.showSweatEffect(lblEnemyIcon); 
+            }*/
+            
             refreshStats();
             
             // Dont forget to update the damage
