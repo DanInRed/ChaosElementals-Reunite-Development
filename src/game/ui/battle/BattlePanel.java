@@ -362,16 +362,10 @@ public class BattlePanel extends javax.swing.JPanel {
     }
     
     private void setupIcons() {
-        // Player Icon
-        System.out.println("Looking for: " + player.getIconPath());
-        java.net.URL testURL = getClass().getResource(player.getIconPath());
-        System.out.println("Found it? " + (testURL != null));
+        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(player.getIconPath(), 192));
+        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(activeEnemy.getIconPath(), 192));
         
-        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(this, player.getIconPath(), 192));
         lblPlayerIcon.setText("");
-
-        // Enemy Icon
-        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(this, activeEnemy.getIconPath(), 192));
         lblEnemyIcon.setText("");
     }
     //UpdateBarColor has been moved to UIUpdater.java and is now called updateHealthBar

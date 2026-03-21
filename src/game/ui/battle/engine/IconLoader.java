@@ -14,19 +14,18 @@ public class IconLoader {
     // Default placeholder in case an icon is missing
     private static final String DEFAULT_PATH = "/game/resources/icons/placeholder.png";
 
-    public static ImageIcon getScaledIcon(Object caller, String path, int size) {
-        URL url = caller.getClass().getResource(path);
+    public static ImageIcon getScaledIcon(String path, int size) {
+        URL url = IconLoader.class.getResource(path);
         
         // Fallback to placeholder if path is wrong
         if (url == null) {
-            System.err.println("Resource not found: " + path + ". Using placeholder.");
-            url = caller.getClass().getResource(DEFAULT_PATH);
+            System.err.println("DEBUG: Missing resource at " + path);
+            url = IconLoader.class.getResource(DEFAULT_PATH);
         }
 
         if (url != null) {
-            ImageIcon icon = new ImageIcon(url);
-            Image img = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
-            return new ImageIcon(img);
+            return new ImageIcon(new ImageIcon(url).getImage()
+                    .getScaledInstance(size, size, Image.SCALE_SMOOTH));
         }
         
         return null; // Both failed
