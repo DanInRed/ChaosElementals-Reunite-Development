@@ -10,7 +10,7 @@ import game.types.AttackType;
 import game.character.holder.CharacterHolder;
 import game.battle.simulator.SimulateBattle;
 import game.battle.simulator.SimulateManaCost;
-import game.engine.DamageCalculator;
+import game.battle.simulator.TurnResult;
 import game.ui.battle.engine.UIUpdater;
 import game.ui.battle.engine.IconLoader;
 import game.ui.battle.engine.DamageAnimation;
@@ -22,7 +22,6 @@ import game.ui.battle.engine.CombatLog;
 public class BattlePanel extends javax.swing.JPanel {
     private CharacterHolder activeEnemy;
     private CharacterHolder player;
-    SimulateManaCost simulateManaCost;
     private CombatLog terminalLog;
     private SimulateBattle simulator; // The Bridge
     private int roundNumber = 1;
@@ -285,57 +284,54 @@ public class BattlePanel extends javax.swing.JPanel {
     
     private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
         //handleAttack(AttackType.NORMAL); updated now that manaValidator Method exists
-        manaValidator(0, player, AttackType.NORMAL);
+        manaValidator(0, AttackType.NORMAL);
     }//GEN-LAST:event_btnNormalActionPerformed
 
     private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
         //handleAttack(AttackType.SKILL_1); 
-        manaValidator(1, player, AttackType.SKILL_1);
+        manaValidator(1, AttackType.SKILL_1);
     }//GEN-LAST:event_btnSkill1ActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
         //handleAttack(AttackType.SKILL_2);
-        manaValidator(2, player, AttackType.SKILL_2);
+        manaValidator(2, AttackType.SKILL_2);
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
     private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
         //handleAttack(AttackType.ULTIMATE);
-        manaValidator(3, player, AttackType.ULTIMATE);
+        manaValidator(3, AttackType.ULTIMATE);
     }//GEN-LAST:event_btnUltimateActionPerformed
-   
-    private void manaValidator(int choice, CharacterHolder character, AttackType selectedAttack) {
-        simulateManaCost = new SimulateManaCost(choice, character, selectedAttack);
+    
+    private void manaValidator(int choice, AttackType selectedAttack) {
+        // 1. Double check (Safety)
+        if (canAfford(choice, selectedAttack)) {
 
-        if (simulateManaCost.isChoiceValid(choice, character, selectedAttack)) {
-            // Spend Mana
-            player.manaCost(simulateManaCost.getManaNeeded());
+            // 2. Spend Mana in the backend
+            // We use a temporary SimulateManaCost just to get the exact value to deduct
+            SimulateManaCost costCheck = new SimulateManaCost(choice, player, selectedAttack);
+            player.manaCost(costCheck.getManaNeeded());
 
-            // Disable all buttons immediately to prevent "double clicking" 
-            // while the animation plays
+            // 3. UI: Lock down to prevent spam-clicking
             setButtonsEnabled(false); 
 
+            // 4. Proceed to the actual battle logic
             handleAttack(selectedAttack);
-        } else {
-            // This part technically shouldn't be reachable if buttons are disabled,
-            // but it's good for debugging!
-            terminalLog.log("Mana check failed for " + selectedAttack);
         }
     }
     
     
     //Replaced the String parameter and method is now handleAttack
     private void handleAttack(AttackType type) {
-        // 0. Before accepting attacks it must satisfy currentMana >= manaCost
-        // 1. Calculate Damage using your existing engine
-        double dmg = DamageCalculator.calculateDamage(player, activeEnemy, type);
-
-        // 2. Apply Damage to the Object
-        activeEnemy.takeDamage(dmg);
-
+        // 1. Call the TurnResult.java
+        TurnResult result = simulator.executePlayerTurn(player, activeEnemy, type);
+        
+        // 2. Dont forget to update the damage
+        activeEnemy.takeDamage(result.getDamageDealt());
+        
         // 3. Update the UI
-        terminalLog.log(player.getName() + " used " + type + "!");
-        terminalLog.log("Dealt " + (int)dmg + " damage!");
-        DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,dmg);//method damage receive animation
+        terminalLog.log(result.getDescription());
+        terminalLog.log("Dealt " + (int)result.getDamageDealt() + " damage!");
+        DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,result.getDamageDealt());
         refreshStats();
 
         // 4. Check for Win or Enemy Counter
@@ -347,25 +343,25 @@ public class BattlePanel extends javax.swing.JPanel {
         }
     }
     
-    private void startEnemyTurnTimer() {
+    private void startEnemyTurnTimer() {//TODO implement the "Sweating Icon" ask DanInRed for details
         // 0. lblCharacterManaRegen disappears at enemy's turn
         manaRegenUpdate(false);
         // 1. Disable buttons so the player can't attack twice!
         setButtonsEnabled(false);
-
+        
         // 2. Create a timer (1.5 seconds delay)
         javax.swing.Timer enemyTimer = new javax.swing.Timer(1500, e -> {
-            // Logic from your terminal simulator
-            AttackType enemyMove = AttackType.NORMAL; // You can add your random logic here later
-            double dmg = DamageCalculator.calculateDamage(activeEnemy, player, enemyMove);
-
-            // Update Backend
-            player.takeDamage(dmg);
-
+            // Logic from terminal simulator
+            TurnResult result = simulator.executeEnemyTurn(activeEnemy, player);
+            
+            refreshStats();
+            
+            // Dont forget to update the damage
+            player.takeDamage(result.getDamageDealt());
             // Update UI
-            terminalLog.log(activeEnemy.getName() + " attacks with " + enemyMove + "!");
-            terminalLog.log("You took " + (int)dmg + " damage.");
-            DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,dmg);
+            terminalLog.log(activeEnemy.getName() + " attacks with " + result.getAttackUsed() + "!");
+            terminalLog.log("You took " + (int)result.getDamageDealt() + " damage.");
+            DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,result.getDamageDealt());
             refreshStats();
 
             // 3. Check if player survived
@@ -386,8 +382,6 @@ public class BattlePanel extends javax.swing.JPanel {
     }
     
     private void manaRegen(javax.swing.JLabel mana, CharacterHolder character){
-        //TODO implement actual mana regeneration
-        //character.getMana().regenerate();
         mana.setText("+" + (int)character.getRegenRate());
         mana.setVisible(true);
     }
