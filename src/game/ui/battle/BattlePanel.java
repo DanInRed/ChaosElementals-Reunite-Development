@@ -10,11 +10,11 @@ import game.types.AttackType;
 import game.character.holder.CharacterHolder;
 import game.battle.simulator.SimulateBattle;
 import game.battle.simulator.SimulateManaCost;
-import game.engine.DamageCalculator;
+import game.battle.simulator.TurnResult;
 import game.ui.battle.engine.UIUpdater;
 import game.ui.battle.engine.IconLoader;
 import game.ui.battle.engine.DamageAnimation;
-
+import game.ui.battle.engine.CombatLog;
 /**
  *
  * @author Dash
@@ -22,8 +22,9 @@ import game.ui.battle.engine.DamageAnimation;
 public class BattlePanel extends javax.swing.JPanel {
     private CharacterHolder activeEnemy;
     private CharacterHolder player;
-    SimulateManaCost simulateManaCost;
+    private CombatLog terminalLog;
     private SimulateBattle simulator; // The Bridge
+    private int roundNumber = 1;
     /**
      * Creates new form BattlePanel
      */
@@ -36,23 +37,26 @@ public class BattlePanel extends javax.swing.JPanel {
         lblPlayerTakeDamage.setVisible(false); //blinking damage receive animation
         lblEnemyTakeDamage.setVisible(false); //
         setupIcons();    // 2. Load the images into those objects currently not working
-        
-        
+        //manaRegen
+        lblPlayerManaRegen.setVisible(false);
+        lblEnemyManaRegen.setVisible(false);
         // 1. Setup UI labels with the actual data
         lblPlayerName.setText(player.getName() + " (" + player.getElementType() + ")");
         lblEnemyName.setText(enemy.getName() + " (" + enemy.getElementType() + ")");
         
         refreshStats(); //Show initial HP values for both player and enemy
         
-        // Set up the JTextArea to look like a terminal
+        // Set up the txtAreaBattlePanel to look like a terminal
         txtAreaBattlePanel.setEditable(false);
         txtAreaBattlePanel.setLineWrap(true);
         txtAreaBattlePanel.setWrapStyleWord(true);
 
+       this.terminalLog = new CombatLog(txtAreaBattlePanel);
+       
+       // 3. Welcome Message
+       terminalLog.log("A duel begins: " + player.getName() + " vs " + enemy.getName());
+       terminalLog.log("Choose an attack!");
         
-        // 3. Welcome Message
-        logToPanel("A duel begins: " + player.getName() + " vs " + enemy.getName());
-        logToPanel("Choose an attack!");
     }   
     
     /**
@@ -88,6 +92,9 @@ public class BattlePanel extends javax.swing.JPanel {
         progPlayerManaBar = new javax.swing.JProgressBar();
         lblEnemyMana = new javax.swing.JLabel();
         progEnemyManaBar = new javax.swing.JProgressBar();
+        lblPlayerManaRegen = new javax.swing.JLabel();
+        lblEnemyManaRegen = new javax.swing.JLabel();
+        lblRoundNumber = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
@@ -101,7 +108,7 @@ public class BattlePanel extends javax.swing.JPanel {
         lblBattlePanel.setMaximumSize(new java.awt.Dimension(200, 32));
         lblBattlePanel.setMinimumSize(new java.awt.Dimension(200, 32));
         lblBattlePanel.setPreferredSize(new java.awt.Dimension(200, 32));
-        add(lblBattlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 32));
+        add(lblBattlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 272, 32));
 
         lblVS.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblVS.setForeground(new java.awt.Color(255, 0, 0));
@@ -205,6 +212,7 @@ public class BattlePanel extends javax.swing.JPanel {
 
         lblEnemyTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblEnemyTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
+        lblEnemyTakeDamage.setText("-damage");
         lblEnemyTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
@@ -212,6 +220,7 @@ public class BattlePanel extends javax.swing.JPanel {
 
         lblPlayerTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPlayerTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
+        lblPlayerTakeDamage.setText("-damage");
         lblPlayerTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
@@ -242,101 +251,134 @@ public class BattlePanel extends javax.swing.JPanel {
         progEnemyManaBar.setMinimumSize(new java.awt.Dimension(150, 16));
         progEnemyManaBar.setPreferredSize(new java.awt.Dimension(150, 16));
         add(progEnemyManaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(832, 176, -1, -1));
+
+        lblPlayerManaRegen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblPlayerManaRegen.setForeground(new java.awt.Color(0, 153, 255));
+        lblPlayerManaRegen.setText("+manaRegen");
+        lblPlayerManaRegen.setToolTipText("");
+        lblPlayerManaRegen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblPlayerManaRegen.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblPlayerManaRegen.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblPlayerManaRegen.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblPlayerManaRegen, new org.netbeans.lib.awtextra.AbsoluteConstraints(576, 176, -1, -1));
+
+        lblEnemyManaRegen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblEnemyManaRegen.setForeground(new java.awt.Color(0, 153, 255));
+        lblEnemyManaRegen.setText("+manaRegen");
+        lblEnemyManaRegen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblEnemyManaRegen.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblEnemyManaRegen.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblEnemyManaRegen.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblEnemyManaRegen, new org.netbeans.lib.awtextra.AbsoluteConstraints(1008, 176, -1, -1));
+
+        lblRoundNumber.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblRoundNumber.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRoundNumber.setText("Round #1");
+        lblRoundNumber.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblRoundNumber.setMaximumSize(new java.awt.Dimension(200, 32));
+        lblRoundNumber.setMinimumSize(new java.awt.Dimension(200, 32));
+        lblRoundNumber.setPreferredSize(new java.awt.Dimension(200, 32));
+        add(lblRoundNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 48, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     
     private void btnNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalActionPerformed
         //handleAttack(AttackType.NORMAL); updated now that manaValidator Method exists
-        manaValidator(0, player, AttackType.NORMAL);
+        manaValidator(0, AttackType.NORMAL);
     }//GEN-LAST:event_btnNormalActionPerformed
 
     private void btnSkill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1ActionPerformed
         //handleAttack(AttackType.SKILL_1); 
-        manaValidator(1, player, AttackType.SKILL_1);
+        manaValidator(1, AttackType.SKILL_1);
     }//GEN-LAST:event_btnSkill1ActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
         //handleAttack(AttackType.SKILL_2);
-        manaValidator(2, player, AttackType.SKILL_2);
+        manaValidator(2, AttackType.SKILL_2);
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
     private void btnUltimateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimateActionPerformed
         //handleAttack(AttackType.ULTIMATE);
-        manaValidator(3, player, AttackType.ULTIMATE);
+        manaValidator(3, AttackType.ULTIMATE);
     }//GEN-LAST:event_btnUltimateActionPerformed
-   
-    private void manaValidator(int choice, CharacterHolder character, AttackType selectedAttack) {
-        simulateManaCost = new SimulateManaCost(choice, character, selectedAttack);
+    
+    private void manaValidator(int choice, AttackType selectedAttack) {
+        // 1. Double check (Safety)
+        if (canAfford(choice, selectedAttack)) {
 
-        if (simulateManaCost.isChoiceValid(choice, character, selectedAttack)) {
-            // Spend Mana
-            player.manaCost(simulateManaCost.getManaNeeded());
+            // 2. Spend Mana in the backend
+            // We use a temporary SimulateManaCost just to get the exact value to deduct
+            SimulateManaCost costCheck = new SimulateManaCost(choice, player, selectedAttack);
+            player.manaCost(costCheck.getManaNeeded());
 
-            // Disable all buttons immediately to prevent "double clicking" 
-            // while the animation plays
+            // 3. UI: Lock down to prevent spam-clicking
             setButtonsEnabled(false); 
 
+            // 4. Proceed to the actual battle logic
             handleAttack(selectedAttack);
-        } else {
-            // This part technically shouldn't be reachable if buttons are disabled,
-            // but it's good for debugging!
-            logToPanel("Mana check failed for " + selectedAttack);
         }
     }
     
+    
     //Replaced the String parameter and method is now handleAttack
     private void handleAttack(AttackType type) {
-        // 0. Before accepting attacks it must satisfy currentMana >= manaCost
-        // 1. Calculate Damage using your existing engine
-        double dmg = DamageCalculator.calculateDamage(player, activeEnemy, type);
-
-        // 2. Apply Damage to the Object
-        activeEnemy.takeDamage(dmg);
-
+        // 1. Call the TurnResult.java
+        TurnResult result = simulator.executePlayerTurn(player, activeEnemy, type);
+        
+        // 2. Dont forget to update the damage
+        activeEnemy.takeDamage(result.getDamageDealt());
+        
         // 3. Update the UI
-        logToPanel(player.getName() + " used " + type + "!");
-        logToPanel("Dealt " + (int)dmg + " damage!");
-        DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,dmg);//method damage receive animation
+        terminalLog.log(result.getDescription());
+        terminalLog.log("Dealt " + (int)result.getDamageDealt() + " damage!");
+        DamageAnimation.showDamageAnimation(lblEnemyTakeDamage,lblEnemyIcon ,result.getDamageDealt());
         refreshStats();
 
         // 4. Check for Win or Enemy Counter
         if (!activeEnemy.isAlive()) {
-            logToPanel("VICTORY! " + activeEnemy.getName() + " fainted.");
+            terminalLog.log("VICTORY! " + activeEnemy.getName() + " fainted.");
             endBattle();
         } else {
             startEnemyTurnTimer();
         }
     }
     
-    private void startEnemyTurnTimer() {
+    private void startEnemyTurnTimer() {//TODO implement the "Sweating Icon" ask DanInRed for details
+        // 0. lblCharacterManaRegen disappears at enemy's turn
+        manaRegenUpdate(false);
         // 1. Disable buttons so the player can't attack twice!
         setButtonsEnabled(false);
-
+        
         // 2. Create a timer (1.5 seconds delay)
         javax.swing.Timer enemyTimer = new javax.swing.Timer(1500, e -> {
-            // Logic from your terminal simulator
-            AttackType enemyMove = AttackType.NORMAL; // You can add your random logic here later
-            double dmg = DamageCalculator.calculateDamage(activeEnemy, player, enemyMove);
-
-            // Update Backend
-            player.takeDamage(dmg);
-
+            // Logic from terminal simulator
+            TurnResult result = simulator.executeEnemyTurn(activeEnemy, player);
+            
+            /*if (result.isWasSweating()) { //for implementation of "Sweating" icon
+                // This is where collaborators can plug in the "Sweating" UI effect
+                UIUpdater.showSweatEffect(lblEnemyIcon); 
+            }*/
+            
+            refreshStats();
+            
+            // Dont forget to update the damage
+            player.takeDamage(result.getDamageDealt());
             // Update UI
-            logToPanel(activeEnemy.getName() + " attacks with " + enemyMove + "!");
-            logToPanel("You took " + (int)dmg + " damage.");
-            DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,dmg);
+            terminalLog.log(activeEnemy.getName() + " attacks with " + result.getAttackUsed() + "!");
+            terminalLog.log("You took " + (int)result.getDamageDealt() + " damage.");
+            DamageAnimation.showDamageAnimation(lblPlayerTakeDamage,lblPlayerIcon ,result.getDamageDealt());
             refreshStats();
 
             // 3. Check if player survived
             if (!player.isAlive()) {
-                logToPanel("DEFEAT... You have fallen.");
+                terminalLog.log("DEFEAT... You have fallen.");
                 endBattle();
             } else {
                 // Re-enable buttons for the player's next turn
-                
+                roundIncrement();           // Mana regeneration is triggered inside roundIncrement
                 btnNormal.setEnabled(true); // Normal is always free
                 updateActionButtons();      // This will selectively enable Skill1, Skill2, Ult
-                logToPanel("Your turn!");
+                terminalLog.log("Your turn!");
             }
         });
 
@@ -344,8 +386,29 @@ public class BattlePanel extends javax.swing.JPanel {
         enemyTimer.start();
     }
     
+    private void manaRegen(javax.swing.JLabel mana, CharacterHolder character){
+        mana.setText("+" + (int)character.getRegenRate());
+        mana.setVisible(true);
+    }
+    private void manaRegenUpdate(boolean update){
+        lblPlayerManaRegen.setVisible(update);
+        lblEnemyManaRegen.setVisible(update);
+    }
     
-    private void refreshStats() {
+    private void roundIncrement(){
+        roundNumber++;
+        lblRoundNumber.setText("ROUND #" + this.roundNumber);
+        
+        player.getMana().regenerate();
+        activeEnemy.getMana().regenerate();
+    
+        manaRegen(lblPlayerManaRegen, player);
+        manaRegen(lblEnemyManaRegen, activeEnemy);
+        refreshStats();
+        updateActionButtons();
+    }
+    
+    private void refreshStats() {//triggered every player or enemy turn
         // Utilizing the engine //TODO
         UIUpdater.refreshHealthBar(progPlayerHPBar, player);
         UIUpdater.refreshHealthBar(progEnemyHPBar, activeEnemy);
@@ -359,16 +422,10 @@ public class BattlePanel extends javax.swing.JPanel {
     }
     
     private void setupIcons() {
-        // Player Icon
-        System.out.println("Looking for: " + player.getIconPath());
-        java.net.URL testURL = getClass().getResource(player.getIconPath());
-        System.out.println("Found it? " + (testURL != null));
+        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(player.getIconPath(), 192));
+        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(activeEnemy.getIconPath(), 192));
         
-        lblPlayerIcon.setIcon(IconLoader.getScaledIcon(this, player.getIconPath(), 192));
         lblPlayerIcon.setText("");
-
-        // Enemy Icon
-        lblEnemyIcon.setIcon(IconLoader.getScaledIcon(this, activeEnemy.getIconPath(), 192));
         lblEnemyIcon.setText("");
     }
     //UpdateBarColor has been moved to UIUpdater.java and is now called updateHealthBar
@@ -406,21 +463,10 @@ public class BattlePanel extends javax.swing.JPanel {
         return check.isChoiceValid(choice, player, type);
     }
      
-    private void logToPanel(String text) { //acting terminal
-        int width = 25; 
-        int padding = Math.max(0, (width - text.length()) / 2);
-
-        StringBuilder centeredText = new StringBuilder();
-        for (int i = 0; i < padding; i++) {
-            centeredText.append(" ");
-        }
-
-        txtAreaBattlePanel.append(centeredText.toString() + text + "\n");
-
-        // This moves the "cursor" to the very end of the text
-        txtAreaBattlePanel.setCaretPosition(txtAreaBattlePanel.getDocument().getLength());
-    }
+    //logToPanel moved to CombatLog.java in src.game.ui.battle.engine
+    
     //showDamageAnimation method moved to DamageAnimation.java
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNormal;
     private javax.swing.JButton btnSkill1;
@@ -431,13 +477,16 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblEnemyHP;
     private javax.swing.JLabel lblEnemyIcon;
     private javax.swing.JLabel lblEnemyMana;
+    private javax.swing.JLabel lblEnemyManaRegen;
     private javax.swing.JLabel lblEnemyName;
     private javax.swing.JLabel lblEnemyTakeDamage;
     private javax.swing.JLabel lblPlayerHP;
     private javax.swing.JLabel lblPlayerIcon;
     private javax.swing.JLabel lblPlayerMana;
+    private javax.swing.JLabel lblPlayerManaRegen;
     private javax.swing.JLabel lblPlayerName;
     private javax.swing.JLabel lblPlayerTakeDamage;
+    private javax.swing.JLabel lblRoundNumber;
     private javax.swing.JLabel lblVS;
     private javax.swing.JPanel pnlActionsButton;
     private javax.swing.JProgressBar progEnemyHPBar;

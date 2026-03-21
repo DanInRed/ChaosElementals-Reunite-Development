@@ -19,12 +19,82 @@ import game.core.InputValidator;
 import game.battle.simulator.dialogues.BattleDialogues;
 import game.types.*;
 
+import game.battle.simulator.TurnResult;
 
 public class SimulateBattle{
      SimulateManaCost simulateManaCost; 
     private final Random rand = new Random();
     private int round = 1;
 
+    /**
+     * GUI-Friendly Player Turn for BattlePanel.java
+     * Processes the logic and returns the result for the UI to display.
+     */
+    public TurnResult executePlayerTurn(CharacterHolder player, CharacterHolder enemy, AttackType type){
+        /* 0. if ever we implement the "stun", "freezed" and "miss" 
+        logic it should be the first and the first to trigger and will return to enemyturn immediately  
+        1. Status Check (The "Gatekeeper")
+            if (player.hasStatus("FREEZE") || player.hasStatus("STUN")) {
+                return new TurnResult(player.getName() + " is frozen and cannot move!", 0, type, false);
+            }
+        */
+        // 1. Calculate Damage using your existing engine
+        double dmg = DamageCalculator.calculateDamage(player, enemy, type);
+
+        // 2. Apply Damage to the Object
+        //enemy.takeDamage(dmg); 
+        // instead of calling this here make sure in BattlePanel executePlayerTurn 
+        // you update it there
+        
+        // 3. Package the result
+        String desc = player.getName() + " used " + type + "!";
+        return new TurnResult(desc, dmg, type);
+    }
+    
+    /**
+     * GUI-Friendly Enemy AI for BattlePanel.java
+     * Handles the "Sweating" logic internally and returns what the enemy decided to do.
+     */
+    public TurnResult executeEnemyTurn(CharacterHolder enemy, CharacterHolder player) {
+        int choice = rand.nextInt(AttackType.values().length);
+        AttackType enemyMove = AttackType.values()[choice];
+        boolean wasSweating = false;
+
+        // Logic loop (The "Sweating" search)
+        while (true) {
+            simulateManaCost = new SimulateManaCost(choice, enemy, enemyMove);
+            if (simulateManaCost.isChoiceValid(choice, enemy, enemyMove)) {
+                enemy.manaCost(simulateManaCost.getManaNeeded());
+                break; 
+            } else {
+                wasSweating = true;
+                if (choice > 0) {
+                    choice--;
+                    enemyMove = AttackType.values()[choice];
+                } else {
+                    break;
+                }
+            }
+        }
+
+        double dmg = DamageCalculator.calculateDamage(enemy, player, enemyMove);
+        //player.takeDamage(dmg);
+        // instead of calling this here make sure in BattlePanel executeEnemyTurn 
+        // you update it there
+        // Build description (UI can use the "Sweating" info if you add a boolean to TurnResult later)
+        
+        // my first initial though aside from the final wasSweating 
+        // attribute inside this class was to proc the icon it 
+        // should be called after this string desc and trigger the future UIUpdater.sweatingMechanic 
+        String desc = (wasSweating ? enemy.getName() + " reconsidered... " : "") + 
+                      enemy.getName() + " used " + enemyMove + "!";
+        
+        return new TurnResult(desc, dmg, enemyMove);
+    }
+    
+    // End of GUI methods for BattlePanel.java
+    
+    // Code below are Terminal specific for ChaosElementalsMain.java located at game.core
     public void startBattle(CharacterHolder player, CharacterHolder enemy, Scanner scanf) {
         System.out.println("\n------------------------------------------ BATTLE START: " + player.getElementType() + " VS " + enemy.getElementType() + " ------------------------------------------");
 
