@@ -25,6 +25,7 @@ public class BattlePanel extends javax.swing.JPanel {
     SimulateManaCost simulateManaCost;
     private CombatLog terminalLog;
     private SimulateBattle simulator; // The Bridge
+    private int roundNumber = 1;
     /**
      * Creates new form BattlePanel
      */
@@ -37,8 +38,9 @@ public class BattlePanel extends javax.swing.JPanel {
         lblPlayerTakeDamage.setVisible(false); //blinking damage receive animation
         lblEnemyTakeDamage.setVisible(false); //
         setupIcons();    // 2. Load the images into those objects currently not working
-        
-        
+        //manaRegen
+        lblPlayerManaRegen.setVisible(false);
+        lblEnemyManaRegen.setVisible(false);
         // 1. Setup UI labels with the actual data
         lblPlayerName.setText(player.getName() + " (" + player.getElementType() + ")");
         lblEnemyName.setText(enemy.getName() + " (" + enemy.getElementType() + ")");
@@ -91,6 +93,9 @@ public class BattlePanel extends javax.swing.JPanel {
         progPlayerManaBar = new javax.swing.JProgressBar();
         lblEnemyMana = new javax.swing.JLabel();
         progEnemyManaBar = new javax.swing.JProgressBar();
+        lblPlayerManaRegen = new javax.swing.JLabel();
+        lblEnemyManaRegen = new javax.swing.JLabel();
+        lblRoundNumber = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
@@ -104,7 +109,7 @@ public class BattlePanel extends javax.swing.JPanel {
         lblBattlePanel.setMaximumSize(new java.awt.Dimension(200, 32));
         lblBattlePanel.setMinimumSize(new java.awt.Dimension(200, 32));
         lblBattlePanel.setPreferredSize(new java.awt.Dimension(200, 32));
-        add(lblBattlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 32));
+        add(lblBattlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 272, 32));
 
         lblVS.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblVS.setForeground(new java.awt.Color(255, 0, 0));
@@ -208,6 +213,7 @@ public class BattlePanel extends javax.swing.JPanel {
 
         lblEnemyTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblEnemyTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
+        lblEnemyTakeDamage.setText("-damage");
         lblEnemyTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblEnemyTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
@@ -215,6 +221,7 @@ public class BattlePanel extends javax.swing.JPanel {
 
         lblPlayerTakeDamage.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPlayerTakeDamage.setForeground(new java.awt.Color(255, 0, 0));
+        lblPlayerTakeDamage.setText("-damage");
         lblPlayerTakeDamage.setMaximumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setMinimumSize(new java.awt.Dimension(100, 16));
         lblPlayerTakeDamage.setPreferredSize(new java.awt.Dimension(100, 16));
@@ -245,6 +252,34 @@ public class BattlePanel extends javax.swing.JPanel {
         progEnemyManaBar.setMinimumSize(new java.awt.Dimension(150, 16));
         progEnemyManaBar.setPreferredSize(new java.awt.Dimension(150, 16));
         add(progEnemyManaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(832, 176, -1, -1));
+
+        lblPlayerManaRegen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblPlayerManaRegen.setForeground(new java.awt.Color(0, 153, 255));
+        lblPlayerManaRegen.setText("+manaRegen");
+        lblPlayerManaRegen.setToolTipText("");
+        lblPlayerManaRegen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblPlayerManaRegen.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblPlayerManaRegen.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblPlayerManaRegen.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblPlayerManaRegen, new org.netbeans.lib.awtextra.AbsoluteConstraints(576, 176, -1, -1));
+
+        lblEnemyManaRegen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblEnemyManaRegen.setForeground(new java.awt.Color(0, 153, 255));
+        lblEnemyManaRegen.setText("+manaRegen");
+        lblEnemyManaRegen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblEnemyManaRegen.setMaximumSize(new java.awt.Dimension(100, 16));
+        lblEnemyManaRegen.setMinimumSize(new java.awt.Dimension(100, 16));
+        lblEnemyManaRegen.setPreferredSize(new java.awt.Dimension(100, 16));
+        add(lblEnemyManaRegen, new org.netbeans.lib.awtextra.AbsoluteConstraints(1008, 176, -1, -1));
+
+        lblRoundNumber.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblRoundNumber.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRoundNumber.setText("Round #1");
+        lblRoundNumber.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblRoundNumber.setMaximumSize(new java.awt.Dimension(200, 32));
+        lblRoundNumber.setMinimumSize(new java.awt.Dimension(200, 32));
+        lblRoundNumber.setPreferredSize(new java.awt.Dimension(200, 32));
+        add(lblRoundNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 48, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     
@@ -287,6 +322,7 @@ public class BattlePanel extends javax.swing.JPanel {
         }
     }
     
+    
     //Replaced the String parameter and method is now handleAttack
     private void handleAttack(AttackType type) {
         // 0. Before accepting attacks it must satisfy currentMana >= manaCost
@@ -312,6 +348,8 @@ public class BattlePanel extends javax.swing.JPanel {
     }
     
     private void startEnemyTurnTimer() {
+        // 0. lblCharacterManaRegen disappears at enemy's turn
+        manaRegenUpdate(false);
         // 1. Disable buttons so the player can't attack twice!
         setButtonsEnabled(false);
 
@@ -336,7 +374,7 @@ public class BattlePanel extends javax.swing.JPanel {
                 endBattle();
             } else {
                 // Re-enable buttons for the player's next turn
-                
+                roundIncrement();           // Mana regeneration is triggered inside roundIncrement
                 btnNormal.setEnabled(true); // Normal is always free
                 updateActionButtons();      // This will selectively enable Skill1, Skill2, Ult
                 terminalLog.log("Your turn!");
@@ -347,8 +385,31 @@ public class BattlePanel extends javax.swing.JPanel {
         enemyTimer.start();
     }
     
+    private void manaRegen(javax.swing.JLabel mana, CharacterHolder character){
+        //TODO implement actual mana regeneration
+        //character.getMana().regenerate();
+        mana.setText("+" + (int)character.getRegenRate());
+        mana.setVisible(true);
+    }
+    private void manaRegenUpdate(boolean update){
+        lblPlayerManaRegen.setVisible(update);
+        lblEnemyManaRegen.setVisible(update);
+    }
     
-    private void refreshStats() {
+    private void roundIncrement(){
+        roundNumber++;
+        lblRoundNumber.setText("ROUND #" + this.roundNumber);
+        
+        player.getMana().regenerate();
+        activeEnemy.getMana().regenerate();
+    
+        manaRegen(lblPlayerManaRegen, player);
+        manaRegen(lblEnemyManaRegen, activeEnemy);
+        refreshStats();
+        updateActionButtons();
+    }
+    
+    private void refreshStats() {//triggered every player or enemy turn
         // Utilizing the engine //TODO
         UIUpdater.refreshHealthBar(progPlayerHPBar, player);
         UIUpdater.refreshHealthBar(progEnemyHPBar, activeEnemy);
@@ -417,13 +478,16 @@ public class BattlePanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblEnemyHP;
     private javax.swing.JLabel lblEnemyIcon;
     private javax.swing.JLabel lblEnemyMana;
+    private javax.swing.JLabel lblEnemyManaRegen;
     private javax.swing.JLabel lblEnemyName;
     private javax.swing.JLabel lblEnemyTakeDamage;
     private javax.swing.JLabel lblPlayerHP;
     private javax.swing.JLabel lblPlayerIcon;
     private javax.swing.JLabel lblPlayerMana;
+    private javax.swing.JLabel lblPlayerManaRegen;
     private javax.swing.JLabel lblPlayerName;
     private javax.swing.JLabel lblPlayerTakeDamage;
+    private javax.swing.JLabel lblRoundNumber;
     private javax.swing.JLabel lblVS;
     private javax.swing.JPanel pnlActionsButton;
     private javax.swing.JProgressBar progEnemyHPBar;
