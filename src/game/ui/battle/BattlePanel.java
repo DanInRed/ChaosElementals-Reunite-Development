@@ -7,7 +7,7 @@
 package game.ui.battle;
 
 import game.types.AttackType;
-import game.character.holder.CharacterHolder;
+import game.entity.character.holder.CharacterHolder;
 import game.battle.simulator.SimulateBattle;
 import game.battle.simulator.SimulateManaCost;
 import game.battle.simulator.TurnResult;

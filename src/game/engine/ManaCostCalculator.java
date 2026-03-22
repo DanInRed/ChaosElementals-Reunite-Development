@@ -7,7 +7,7 @@
 package game.engine;
 
 import game.types.*;
-import game.character.holder.CharacterHolder;
+import game.entity.character.holder.CharacterHolder;
 
 public class ManaCostCalculator {
     /**

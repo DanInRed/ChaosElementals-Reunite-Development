@@ -4,7 +4,7 @@
  *  Author: Dash 
  *  Date: Mar 7, 2026
  */
-package game.character.stats;
+package game.entity.character.stats;
 
 /**
  *

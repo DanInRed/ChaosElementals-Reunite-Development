@@ -9,12 +9,12 @@ package game.battle.simulator; // or game.battle
 import java.util.Scanner;
 import java.util.Random;
 
-import game.character.holder.CharacterHolder;
+import game.entity.character.holder.CharacterHolder;
 import game.engine.*; //DamageCalculator and ManaCostCalculator
 import static game.engine.GameUtils.pause;
 
-import game.core.AttackTypeValidator;
-import game.core.InputValidator;
+import game.core.validator.AttackTypeValidator;
+import game.core.validator.InputValidator;
 
 import game.battle.simulator.dialogues.BattleDialogues;
 import game.types.*;

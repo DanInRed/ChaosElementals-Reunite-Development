@@ -4,10 +4,12 @@
  *  Author: Dash 
  *  Date: Mar 7, 2026
  */
-package game.character.holder;
+package game.entity.character.holder;
 
+import game.entity.character.stats.HealthPoints;
+import game.entity.character.stats.ManaPoints;
+import game.entity.character.stats.BaseDamage;
 import game.types.*;
-import game.character.stats.*;
 import game.elements.*;
 
 public class CharacterHolder {

@@ -7,7 +7,7 @@
 
 package game.ui.battle.engine;
 
-import game.character.holder.CharacterHolder;
+import game.entity.character.holder.CharacterHolder;
 import javax.swing.JProgressBar;
 import java.awt.Color;
 

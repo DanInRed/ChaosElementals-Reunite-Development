@@ -4,7 +4,7 @@
  *  Author: Dash 
  *  Date: Mar 7, 2026
  */
-package game.core;
+package game.core.validator;
 
 import game.elements.*;
 import game.types.*;
