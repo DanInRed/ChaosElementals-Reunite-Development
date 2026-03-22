@@ -1,6 +1,6 @@
 package game.battle.simulator;
 
-import game.character.holder.CharacterHolder;
+import game.entity.character.holder.CharacterHolder;
 import game.engine.ManaCostCalculator;
 import game.types.AttackType;
 

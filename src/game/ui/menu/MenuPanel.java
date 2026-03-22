@@ -6,10 +6,10 @@
  */
 package game.ui.menu;
 
+import game.entity.character.holder.CharacterHolder;
 import java.util.Random;
 //import game.battle.simulator.*;
-import game.character.holder.*;
-import game.core.ElementValidator;
+import game.core.validator.ElementValidator;
 import game.elements.*;
 /**
  *

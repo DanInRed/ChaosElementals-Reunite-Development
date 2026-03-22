@@ -1,4 +1,4 @@
-package game.character.stats;
+package game.entity.character.stats;
 
 
 public class ManaPoints {

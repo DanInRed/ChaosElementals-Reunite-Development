@@ -11,8 +11,8 @@
  */
 package game.elements;
 
+import game.entity.character.stats.BaseDamage;
 import game.types.*;
-import game.character.stats.*;
 
 public class WaterElemental implements Element{
     private BaseDamage base = new BaseDamage();

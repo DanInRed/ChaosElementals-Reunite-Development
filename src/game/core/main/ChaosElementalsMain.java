@@ -3,12 +3,11 @@
  *  Author: Dash 
  *  Date: Mar 7, 2026
  */
-package game.core;
+package game.core.main;
 //dont touch these imports they serve as terminal testing purpose
 import java.util.Scanner;
 
 import game.battle.simulator.*;
-import game.character.holder.*;
 import java.util.Random;
 import game.elements.*;
 import game.ui.GameWindow;
