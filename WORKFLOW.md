@@ -17,11 +17,11 @@ Ensure your local machine matches the remote `main` branch before you begin work
 
 * **Run these commands**:
 ```bash
-git fetch --all
-git reset --hard origin/main
+git pull origin main
+git checkout -b feature/[yourFeature]-yourNickName            
 
+// or (-b experiment-[yourTask]-yourNickName)
 ```
-
 
 
 ---
@@ -49,7 +49,7 @@ If you receive a conflict error during a merge:
 * `git commit -m "Resolved merge conflict"`
 * `git push origin feature/your-feature-name`
 
-
+(feel free to reach out)
 
 ---
 

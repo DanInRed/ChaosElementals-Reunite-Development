@@ -1,5 +1,10 @@
-### BACKEND ROADMAP FOR BASE STATS
+### Base Stats for Character entity (for Elementals stats only)
+- This is where to edit incase we decide to add a special entities like BOSSes
+- Currently calls the default constructors for character stats 
+
+## Navigation
 - Back to README.md [README.md](../../../README.md)
+- Next -> BattleFlow.md [BattleFlow.md](BattleFlow.md)
 
 
 ## Health Points

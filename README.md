@@ -1,28 +1,34 @@
-# Elemental Masters - TURN BASED simple JAVA PROJECT using Java Ant in Apache Net Beans (version 28 and above)
+### Chaos Elementals: Reunite 
 A Java-based battle engine for our FINAL PROJECT
+- Status: currently in development
+- Tech Stack: Java(JDK25), Swing, Graphics2D, Ant and Netbeans version 28;
+
+---
+## Quick Start
+1. Clone the repo
+2. Open in Netbeans or vsCode
+3. Run the ChaosElementalsMain.java for Battle Simulation or ChaosElementalsGridExperiment.java for the 2d Top down "Overworld" 
+- main classes are located at `src.game.core.main`
+
+- DanInRed(Dash) acting Project Manager
+
+--- 
 
 ## Getting Started
-
 Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 
-### ⚠️ MANDATORY: All team members must follow the protocols defined in WORKFLOW.md to ensure code stability and prevent merge conflicts. Please review the "DO NOTs" section before submitting any Pull Requests.
-
-
-
-## How to Run
-1. Open this project in **NetBeans**.
-2. Right-click the project and select **Run**.
-3. The main entry point is `SimulateBattle.java` in the `battle.simulator` package.
+---
 
 ## Project Structure
-- `src/character`: Contains BaseCharacter and subclasses.
-- `src/elements`: Handles the elemental advantage logic (Fire, Water, etc.).
-- `src/battle`: The core simulation and coordinate-based mechanics.
-- `src/core/TestingElementalMaster.java`: This is the Main Class make sure to run this one!
-- `src/elements`: This contains all the 8 elements 
-- `src/engine`: This is where the DamageCalculator.java resides
-- `src/interfaces`: This is where ElementAction.java resides
-- `src/types`: This contains AttackType and ElementType in enums
+- `src/game/entity`: Contains all entity related methods and classes.
+- `src/game/resources` : Contains all the "Sprites" and the "Icons".
+- `src/game/elements`: Contains all the elemental types the game has to offer (Fire, Water, etc.).
+- `src/game/battle`: The core simulation serves as backend calculations and dialogues for BattlePanel.java.
+- `src/game/core/main`: This is where the Main Class resides.
+- `src/game/core/validator`: This handles the input sanitation.  
+- `src/engine`: This currently holds the logic for settings of main menu.
+- `src/game/ui`: This contains the placeholder UI. (Currently under construction.)
+- `src/game/types`: This contains AttackType and ElementType in enums.
 
 
 ## BackEnd File
@@ -31,7 +37,7 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 
 ## Contributing
 - Do not push directly to `main`.
-- Create a new branch for your GUI features.
+- Create a new branch for your features.
 - Open a Pull Request for review.
 
 ## 📝 TO-DO List (Task Board)
@@ -41,7 +47,7 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 - [ ] **GUI Implementation** (Main priority for contributors!)
 - [ ] Save/Load System for Player Progress
 - [ ] Sprite Integration for Characters
-- [ ] Sound Effects & Background Music (OPTIONAL)
+- [ ] Sound Effects & Background Music
 
 ### 1. Atomic Commits
 * **Rule:** One commit = One specific change.
@@ -55,8 +61,8 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 
 ### 3. Package Integrity
 * **Rule:** Respect the folder structure.
-* **src/gui**: Only for Figma-to-Java swing/FX classes.
-* **src/engine**: Only for calculation logic.
+* **src/game/resources**: This should only contain images and Icons.
+* **src/game/battle**: Only for battle related backend files like calculations and battle dialogues.
 * **Why:** Misplaced files lead to `ClassNotFound` errors and broken imports.
 
 ### 4. Meaningful Naming
@@ -68,10 +74,9 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 ---
 
 ## WARNING!!!!
-- Do not tamper with the .gitignore without any prior notice!!!
-- If .gitignore is tampered, your merge request is DENIED!
-- This is crucial to keep our devices safe from unwanted 10 HOURS DEBUG SESSION ;)
+- Do not tamper with the .gitignore without any prior notice!
 - MAKE SURE to create a new branch when editing in your NETBEANS or VSCODE!
-- Direct tampering with main Branch is STRICTLY PROHIBITED!!!
-- All these info are essential to avoid the 10 HOURS DEBUG SESSION
-- If reading all these are tiring, then 10 HOURS DEBUG SESSION with ZERO PROGRESS is a THOUSAND TIMES more FRUSTRATING and it may attract unwanted attention.
+- Direct tampering with main Branch is STRICTLY PROHIBITED!
+- This is crucial to keep our devices safe from unwanted 10 HOURS DEBUG SESSION.
+- All these info are essential to avoid the 10 HOURS DEBUG SESSION.
+
