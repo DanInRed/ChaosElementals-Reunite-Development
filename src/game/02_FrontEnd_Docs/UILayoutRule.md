@@ -1,4 +1,9 @@
-### Screen Resolution
+### UI LAYOUT RULES to mitigate bugs
+
+## Navigation 
+- Back to README.md [README.md](../../../README.md)
+
+## Screen Resolution
 - Resolution must always be set to 1280px (width) x 720px (height) 
 - This ensures 16:9 ratio for the development of our 2D grid layout map
 

@@ -1,6 +1,9 @@
 ### Battle Flow and Logic
 - This is where the battle calculation and battle dialogues happen.
 
+## Navigation
+- Back to README.md [README.md](../../../README.md)
+- Back to BaseStats.md [BaseStats.md](BaseStats.md) 
 ---
 ## Battle Simulator 
 - Located at `src/game/battle/simulator` 

@@ -30,10 +30,19 @@ Before contributing, please read our [Development Workflow](WORKFLOW.md) .
 - `src/game/ui`: This contains the placeholder UI. (Currently under construction.)
 - `src/game/types`: This contains AttackType and ElementType in enums.
 
+---
 
 ## BackEnd File
 - location `src.game.01_BackEnd_Docs`
 - Base Stats [BaseStats](src/game/01_BackEnd_Docs/BaseStats.md)
+- Battle Flow Logic [BattleFlow](src/game/01_BackEnd_Docs/BattleFlow.md)
+
+## FrontEnd File 
+- Currently Work in Progress 
+- location `src.game.02_FrontEnd_Docs`
+- UI Rules [UILayoutRule.md](src/game/02_FrontEnd_Docs/UILayoutRule.md)
+
+---
 
 ## Contributing
 - Do not push directly to `main`.
