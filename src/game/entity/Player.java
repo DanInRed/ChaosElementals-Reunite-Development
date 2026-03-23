@@ -19,16 +19,23 @@ public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
     
+    public final int screenX;
+    public final int screenY;
+    
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+        
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2- (gp.tileSize/2);
+        
         setDefaultValues();
         getPlayerImage();
     }
     
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
     }
@@ -38,14 +45,14 @@ public class Player extends Entity{
         try{
             //create the sprites pls 
             
-            up1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDefault.png"));
+            up1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -56,22 +63,22 @@ public class Player extends Entity{
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed == true){
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
             }
             else if(keyH.downPressed == true){
                 direction = "down";
-                y += speed;
+                worldY += speed;
             }
             else if(keyH.leftPressed == true){
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             }
             else if(keyH.rightPressed == true){
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
             spriteCounter++;
-            if(spriteCounter>12){
+            if(spriteCounter>20){
                 if(spriteNumber == 1){
                     spriteNumber = 2;
                 }else if(spriteNumber == 2){
@@ -125,11 +132,11 @@ public class Player extends Entity{
             
         }
         if(image != null){
-            g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }else{
             // Fallback so the game doesn't crash while debugging
             g2.setColor(Color.WHITE);
-            g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+            g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
         }
     }
 }
