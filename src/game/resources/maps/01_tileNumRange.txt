@@ -1,0 +1,6 @@
+ID Range,   Terrain Type,           Collision,  Potential Method / Logic
+00 - 09,    Plains (Grass/Path),    false,      "playFootstep(""grass"")"
+10 - 19,    Liquid (Ocean/River),   false,      setPlayerSpeed(0.8f) (Slows Dash down)
+20 - 29,    Shore (Sand/Dirt),      false,      "spawnParticle(""dust"")"
+30 - 39,    Obstacles (Tree/Rock),  true,       stopPlayerMovement()
+40 - 49,    Structures (Brick/Wall),true,       playClinkSound()

@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int tileSize = originalTileSize * scale; // 48x48 tile
     public final int maxScreenCol = 26; 
     public final int maxScreenRow = 15; 
-    public final int screenWidth = tileSize * maxScreenCol; // 1248px
+    public final int screenWidth = tileSize * maxScreenCol + 32; // 1248px + 32 = 1280 
     public final int screenHeight = tileSize * maxScreenRow; // 720px
     
     // WORLD SETTINGS
@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
     
     // Set player's default position
@@ -56,41 +57,7 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread = new Thread(this);
         gameThread.start();
     }
-    /*
-    @Override // this is for the Runnable implementation in Thread gameThread;
-    public void run(){  // The GameLoop
-        
-        double drawInterval = 1000000000/FPS; // 60 fps per second (1 billion nanoSeconds)
-        double nextDrawTime = System.nanoTime() + drawInterval;
-        
-        while(gameThread != null){
-            
-            
-            
-            // 1. Update: update information such as character positions
-            update();
-            // 2. DRAW: draw the screen with the updated information
-            repaint(); //calling the painComponent
-            //
-            
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime /= 1000000; //divide by 1 million to turn nanoSeconds into milliseconds
-                
-                if(remainingTime < 0){
-                    remainingTime = 0;
-                }
-                
-                Thread.sleep((long) remainingTime);
-                
-                nextDrawTime += drawInterval;
-                
-            } catch (InterruptedException ex) {
-                System.getLogger(GamePanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
-        }
-    }
-    */
+    
     @Override
     public void run(){
         double drawInterval = 1000000000/FPS;
