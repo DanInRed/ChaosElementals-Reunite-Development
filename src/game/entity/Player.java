@@ -10,6 +10,7 @@ import game.core.main.GamePanel;
 import game.core.main.KeyHandler;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -29,30 +30,36 @@ public class Player extends Entity{
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2- (gp.tileSize/2);
         
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32;
+        solidArea.height = 32;
+        
         setDefaultValues();
         getPlayerImage();
     }
     
     public void setDefaultValues(){
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
+        worldX = gp.tileSize * 5;
+        worldY = gp.tileSize * 15;
         speed = 4;
         direction = "down";
     }
     
     public void getPlayerImage(){
-        
+        String filePath = "/game/resources/player/";
         try{
             //create the sprites pls 
             
-            up1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/game/resources/player/DashDown2.png"));
+            up1 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream(filePath +"DashDown2.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -63,20 +70,31 @@ public class Player extends Entity{
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed == true){
                 direction = "up";
-                worldY -= speed;
             }
             else if(keyH.downPressed == true){
                 direction = "down";
-                worldY += speed;
             }
             else if(keyH.leftPressed == true){
                 direction = "left";
-                worldX -= speed;
             }
             else if(keyH.rightPressed == true){
                 direction = "right";
-                worldX += speed;
             }
+            
+            // Check Tile Collision
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+            
+            // If collision is false, player can move 
+            if(collisionOn == false){
+                switch(direction){
+                    case "up" : worldY -= speed; break;
+                    case "down" : worldY += speed; break;
+                    case "left" : worldX -= speed; break;
+                    case "right" : worldX += speed; break;
+                }
+            }
+            
             spriteCounter++;
             if(spriteCounter>20){
                 if(spriteNumber == 1){

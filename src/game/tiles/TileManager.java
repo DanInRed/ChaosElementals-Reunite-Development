@@ -16,48 +16,56 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
-    int mapTileNum[][];
+    public Tile[] tile;
+    public int mapTileNum[][];
     
     // ANIMATION VARIABLES
     int spriteCounter = 0;
     int spriteNum = 1;
     
     public TileManager(GamePanel gp){
+        final String path = "/game/resources/maps/";
         this.gp = gp;
         
-        tile = new Tile[10];
+        tile = new Tile[50];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         
         getTimeImage();
-        loadMap("/game/resources/maps/50by50map.txt");
+        loadMap(path + "50by50map.txt");
     }
 
     public void getTimeImage() {
+        final String path = "/game/resources/tiles/"; 
         try{
-            
+            // 10 = water, 20 = sand,  00-01 = grass path, 5 = earth/field, 30 = tree, 40 = brick/wall;
+            // --- 00-09 = WALKABLE PATHS ---
             tile[0] = new Tile(); //grass1
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/grass1.png"));
-            tile[3] = new Tile(); //grass2
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/grass2.png"));
+            tile[0].image = ImageIO.read(getClass().getResourceAsStream(path + "grass1.png"));
+            tile[1] = new Tile(); //grass2
+            tile[1].image = ImageIO.read(getClass().getResourceAsStream(path + "grass2.png"));
             
             
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/brick.png"));
+            tile[40] = new Tile();
+            tile[40].image = ImageIO.read(getClass().getResourceAsStream(path + "brick.png"));
+            tile[40].collision = true;
             
-            tile[2] = new Tile(); //water1
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/water1.png"));
-            tile[4] = new Tile(); //water2
-            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/water2.png"));
+            // --- 10-19 = WALKABLE WATER (SHALLOW OCEAN/POND/RIVER) ---
+            tile[10] = new Tile(); //water1
+            tile[10].image = ImageIO.read(getClass().getResourceAsStream(path + "water1.png"));
+            //tile[10].collision = true;
+            tile[11] = new Tile(); //water2
+            tile[11].image = ImageIO.read(getClass().getResourceAsStream(path + "water2.png"));
+            //tile[11].collision = true;
             
             tile[5] = new Tile(); //earth
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/earth.png"));
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream(path + "earth.png"));
             
-            tile[6] = new Tile(); //tree
-            tile[6].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/tree.png"));
+            tile[30] = new Tile(); //tree
+            tile[30].image = ImageIO.read(getClass().getResourceAsStream(path + "tree.png"));
+            tile[30].collision = true;
             
-            tile[7] = new Tile(); //sand
-            tile[7].image = ImageIO.read(getClass().getResourceAsStream("/game/resources/tiles/sand.png"));
+            tile[20] = new Tile(); //sand
+            tile[20].image = ImageIO.read(getClass().getResourceAsStream(path + "sand.png"));
             
         }catch(IOException e){
             e.printStackTrace();
@@ -89,7 +97,7 @@ public class TileManager {
                 String line = br.readLine();
                 
                 while(col < gp.maxWorldCol){
-                    String numbers[] = line.split(" ");
+                    String numbers[] = line.split("\\s+");
                     
                     int num = Integer.parseInt(numbers[col]);
                     
@@ -101,16 +109,15 @@ public class TileManager {
                     row++;
                 }
             }
+            br.close();
             
         }catch(Exception e){
-            
+            System.out.println("Error: Could not load map file at " + filePath);
+            e.printStackTrace();
         }
     }
     
     public void draw(Graphics2D g2){
-        /*g2.drawImage(tile[0].image, 0, 0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, (gp.tileSize), 0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, (gp.tileSize*2), 0, gp.tileSize, gp.tileSize, null);*/
         
         int worldCol = 0;
         int worldRow = 0;
@@ -128,8 +135,8 @@ public class TileManager {
             // Animation Logic: Swap tiles based on spriteNum
             int finalTileNum = tileNum;
             
-            if(tileNum == 0 && spriteNum == 2) finalTileNum = 3; // Switch grass1 to grass2
-            if(tileNum == 2 && spriteNum == 2) finalTileNum = 4; // Switch water1 to water2
+            if(tileNum == 0 && spriteNum == 2) finalTileNum = 1; // Switch grass1 to grass2
+            if(tileNum == 10 && spriteNum == 2) finalTileNum = 11; // Switch water1 to water2
             
             // Memory efficient that draws only those tiles that falls inside the player's screen
             if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
