@@ -20,5 +20,6 @@ public class OBJ_Door extends SuperObject{
             System.out.println("Error at OBJ_Door");
             e.printStackTrace();
         }
+        collision = true;
     }
 }

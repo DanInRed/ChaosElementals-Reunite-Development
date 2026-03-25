@@ -75,6 +75,6 @@ public class ChaosElementalsMain {
         // New: Call the Simulator
         SimulateBattle simulator = new SimulateBattle();
         simulator.startBattle(player, enemy, scanf);
-        */
+       */ 
     }
 }
