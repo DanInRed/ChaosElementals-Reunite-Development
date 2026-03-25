@@ -29,6 +29,7 @@ public class ChaosElementalsGridExperiment {
         window.setLocationRelativeTo(null);
         window.setVisible((true));
         
+        gamePanel.setupGame();
         gamePanel.startGameThread();
     }
     
