@@ -12,10 +12,36 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener{
     
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public String input = "";
+    public boolean mechanics = false;
+    public int creditCounter = 0;
     
-    @Override
+    public void update(){ //mechanic
+        if(mechanics){
+            creditCounter++;
+            
+            if(creditCounter > 300){
+                mechanics = false;
+                creditCounter = 0;
+            }
+        }
+        
+        
+    }
+    
+    @Override //dont touch or debug 10 hours
     public void keyTyped(KeyEvent e) {
-        // dont use
+        char c = e.getKeyChar();
+        input += Character.toLowerCase(c);
+        
+        if (input.length() > 20) {
+            input = input.substring(1);
+        }
+        
+        if (input.endsWith("dev")) {
+            mechanics = !mechanics; 
+            input = "";
+        }
     }
 
     @Override

@@ -1,0 +1,29 @@
+Chaos Elementals: Reunite resource credits
+
+Location: /src/game/resources/sound/
+
+First Light Particles - Music by: Yoiyami (CC0)
+Used as Title Theme 
+https://opengameart.org/content/first-light-particles-%E2%80%93-cc0-atmospheric-pianoambient-track
+
+Christmas special 4(Guitar) - Music by Pro Sensory (Alex McCulloch)
+used for Over-world exploration (renamed titletheme.wav)
+https://opengameart.org/content/christmas-special-4-guitar
+
+Dream 2 (ambience) - Music by TokyoGeisha
+https://opengameart.org/content/dream-2-ambience
+Used for Cave of equilibrium
+
+Code tutorial reference: RyiSnow's How to make a 2D game in java (youtube)
+https://youtu.be/om59cwR7psI
+
+Object SFX and footsteps made using BFXR.net
+https://www.bfxr.net/
+
+LLM used for Code Assistance, debug and logic syntax 
+Gemini 3.0 - Flash
+
+Location: /src/game/resources/ 
+https://www.piskelapp.com/
+- png files for tiles
+- png files for player sprites

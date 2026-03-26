@@ -121,18 +121,31 @@ public class Player extends Entity{
             
             switch(objectName){
                 case "Key":
+                    gp.playSFX(4);
                     hasKey++;
                     gp.obj[i] = null;
-                    System.out.println("Key: " + hasKey);
+                    gp.ui.currentMessage = "Picked up a Key! \nKey: " + hasKey;
+                    gp.ui.messageOn = true;
                     break;
                 case "Door":
-                    if(hasKey > 0){
-                        gp.obj[i] = null;
+                    if(hasKey > 0 && gp.obj[i].collision == true){
+                        gp.playSFX(5);
+                        gp.obj[i].collision = false;
                         hasKey--;
+                        gp.ui.currentMessage = "Used a Key! \nRemaining Keys: " + hasKey;
+                        gp.ui.messageOn = true;
+                    }else if(gp.obj[i].collision){
+                        gp.ui.currentMessage = "I need a key!";
+                        gp.ui.messageOn = true;
                     }
-                    System.out.println("Key: " + hasKey);
                     break;
-                    
+                case "Boots":
+                    gp.playSFX(4);
+                    speed += 1;
+                    gp.ui.currentMessage = "Picked up the Speedy boots! \nSpeed increased by 25%";
+                    gp.ui.messageOn = true;
+                    gp.obj[i] = null;
+                    break;
             }
         }
     }
