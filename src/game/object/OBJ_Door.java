@@ -14,6 +14,7 @@ public class OBJ_Door extends SuperObject{
     public OBJ_Door(){
         String path = "/game/resources/objects/";
         name = "Door";
+        boolean isOpen = false;
         try{
             image = ImageIO.read(getClass().getResourceAsStream(path + "door.png"));
         }catch(IOException e){
