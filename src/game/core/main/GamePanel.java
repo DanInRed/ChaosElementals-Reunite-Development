@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements Runnable{
    // SCREEN SETTINGS
@@ -29,19 +30,25 @@ public class GamePanel extends JPanel implements Runnable{
     // WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public final int maxWorldWidth = tileSize * maxWorldCol;
-    public final int maxWorldHeight = tileSize * maxWorldRow;
     
     // FPS
     int FPS = 60;
     
+    // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Thread gameThread;
+    Sound sound = new Sound();
+    
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
+    Thread gameThread;
+    
+    // ENTITY
     public Player player = new Player(this, keyH);
     public SuperObject obj[] = new SuperObject[10];
+    
+    // UI DISPLAY
+    public UI ui = new UI(this);
     
     // Set player's default position
     int playerX = 100;
@@ -58,6 +65,8 @@ public class GamePanel extends JPanel implements Runnable{
     
     public void setupGame(){
         aSetter.setObject();
+        
+        playMusic(1); // Sound.java 
     }
     
     public void startGameThread(){
@@ -97,11 +106,19 @@ public class GamePanel extends JPanel implements Runnable{
         }
         
     }
+    // mechanic
+    public void runUpdate(Graphics g){
+        Graphics2D g2 = (Graphics2D)g;
+            //TODO thread sleeper
+            ui.draw(g2);
+            
+    }
     
     public void update(){
         // moved to Player.java
         player.update(); // Player walk animation
         tileM.update(); // Tiles animation
+        keyH.update(); // mechanics 5 seconds screentime
     }   
     
     @Override
@@ -110,7 +127,6 @@ public class GamePanel extends JPanel implements Runnable{
         
         Graphics2D g2 = (Graphics2D)g;
         tileM.draw(g2);
-        
         // OBJECT draw
         for(int i = 0; i < obj.length; i++){
             if(obj[i] != null){
@@ -119,8 +135,23 @@ public class GamePanel extends JPanel implements Runnable{
         }
         
         player.draw(g2);
-        
+        runUpdate(g2); // mechanic
         g2.dispose();
+    }
+    
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    
+    public void stopMusic(){
+        sound.stop();
+    }
+    
+    public void playSFX(int i){
+        sound.setFile(i);
+        sound.play();
     }
     
 }
