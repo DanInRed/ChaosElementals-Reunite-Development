@@ -109,7 +109,6 @@ public class GamePanel extends JPanel implements Runnable{
     // mechanic
     public void runUpdate(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
-            //TODO thread sleeper
             ui.draw(g2);
             
     }

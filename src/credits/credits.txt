@@ -1,29 +1,53 @@
-Chaos Elementals: Reunite resource credits
+=====================================================
+          CHAOS ELEMENTALS: REUNITE
+               Resource Credits
+=====================================================
 
-Location: /src/game/resources/sound/
+[ AUDIO - MUSIC ]
+-----------------------------------------------------
+Track: First Light Particles
+Role: Title Theme & Main Menu
+Author: Yoiyami
+License: CC0 (Public Domain)particles
+Source: https://opengameart.org/users/yoiyami
 
-First Light Particles - Music by: Yoiyami (CC0)
-Used as Title Theme 
-https://opengameart.org/content/first-light-particles-%E2%80%93-cc0-atmospheric-pianoambient-track
+Track: Christmas Special 4 (Guitar)
+Role: Overworld Exploration 
+originalname:Christmas Special 4 (Guitar).wav (renamed to titletheme.wav)
+Author: Pro Sensory (Alex McCulloch)
+License: CC0 (Public Domain)
+Source: https://opengameart.org/content/christmas-special-4-guitar
 
-Christmas special 4(Guitar) - Music by Pro Sensory (Alex McCulloch)
-used for Over-world exploration (renamed titletheme.wav)
-https://opengameart.org/content/christmas-special-4-guitar
+Track: Dream 2 (Ambience)
+Role: Cave of Equilibrium Theme
+Author: TokyoGeisha
+License: CC0 (Public Domain)
+Source: https://opengameart.org/content/dream-2-ambience
 
-Dream 2 (ambience) - Music by TokyoGeisha
-https://opengameart.org/content/dream-2-ambience
-Used for Cave of equilibrium
+[ AUDIO - SOUND EFFECTS ]
+-----------------------------------------------------
+Object SFX & Character Footsteps:
+Generated via BFXR (8-bit Sound Generator)
+Source: https://www.bfxr.net/
 
-Code tutorial reference: RyiSnow's How to make a 2D game in java (youtube)
-https://youtu.be/om59cwR7psI
+[ GRAPHICS & ASSETS ]
+-----------------------------------------------------
+All Tiles & Character Sprites:
+Created/Edited by: Dash
+Software used: Piskel (Online Pixel Art Editor)
+Source: https://www.piskelapp.com/
+Storage: /src/game/resources/
 
-Object SFX and footsteps made using BFXR.net
-https://www.bfxr.net/
+[ TECHNICAL REFERENCES ]
+-----------------------------------------------------
+Core Engine Architecture:
+Based on RyiSnow's "How to Make a 2D Game in Java"
+Reference: https://youtu.be/om59cwR7psI
 
-LLM used for Code Assistance, debug and logic syntax 
-Gemini 3.0 - Flash
+Development Assistance:
+AI Logic, Debugging & Syntax Optimization provided by Google Gemini.
 
-Location: /src/game/resources/ 
-https://www.piskelapp.com/
-- png files for tiles
-- png files for player sprites
+=====================================================
+Developed by Dash/DanInRed @ CIT-University OOP2 Final Project
+Date: March 2026
+=====================================================
