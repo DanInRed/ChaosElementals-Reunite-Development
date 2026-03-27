@@ -34,12 +34,12 @@ public class Player extends Entity{
         screenY = gp.screenHeight/2- (gp.tileSize/2);
         
         solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
+        solidArea.x = 12;
+        solidArea.y = 24;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 24;
-        solidArea.height = 24;
+        solidArea.height = 16;
         
         setDefaultValues();
         getPlayerImage();
@@ -124,27 +124,28 @@ public class Player extends Entity{
                     gp.playSFX(4);
                     hasKey++;
                     gp.obj[i] = null;
-                    gp.ui.currentMessage = "Picked up a Key! \nKey: " + hasKey;
-                    gp.ui.messageOn = true;
+                    gp.ui.showMessage("Picked up a Key! \nKey: " + hasKey);
                     break;
                 case "Door":
-                    if(hasKey > 0 && gp.obj[i].collision == true){
-                        gp.playSFX(5);
-                        gp.obj[i].collision = false;
-                        hasKey--;
-                        gp.ui.currentMessage = "Used a Key! \nRemaining Keys: " + hasKey;
-                        gp.ui.messageOn = true;
-                    }else if(gp.obj[i].collision){
-                        gp.ui.currentMessage = "I need a key!";
-                        gp.ui.messageOn = true;
-                    }
+                    gp.playSFX(5);
                     break;
                 case "Boots":
                     gp.playSFX(4);
-                    speed += 1;
-                    gp.ui.currentMessage = "Picked up the Speedy boots! \nSpeed increased by 25%";
-                    gp.ui.messageOn = true;
+                    speed += 4;
+                    gp.ui.showMessage("Picked up the Speedy boots! \nSpeed increased by 100% (8px*60fps)");
+                    System.out.println("Speed: " + speed);
                     gp.obj[i] = null;
+                    break;
+                case "Chest":
+                    if(hasKey > 0 && gp.obj[i].collision == true){
+                        gp.playSFX(5);
+                        gp.obj[i].collision = false;
+                        gp.obj[i] = null; // Chest dissapears when opened 
+                        hasKey--;
+                        gp.ui.showMessage("Used a Key! \nRemaining Keys: " + hasKey);
+                    }else if(gp.obj[i].collision){
+                        gp.ui.showMessage("I need a key!");
+                    }
                     break;
             }
         }

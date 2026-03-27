@@ -12,16 +12,21 @@ import java.awt.Graphics2D;
 
 public class UI {
     GamePanel gp;
+    Font arial_20;
     
-    public String currentMessage = "";
-    public boolean messageOn  = false;
-    public int messageCounter = 0; // The bark Timer
+    private String currentMessage = "";
+    private boolean messageOn  = false;
+    private int messageCounter = 0; // The bark Timer
     
     public UI(GamePanel gp){
         this.gp = gp;
+        arial_20 = new Font("Arial", Font.PLAIN, 20);
     }
     
     public void draw(Graphics2D g2) {
+        g2.setFont(arial_20);
+        g2.setColor(Color.WHITE);
+        
         if (gp.keyH.mechanics) {
             String repo = "Game: Chaos-Elementals-Reunite";
             String author = "Dev: [DanInRed/Dash]";

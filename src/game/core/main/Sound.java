@@ -22,7 +22,7 @@ public class Sound {
         soundURL[2] = getClass().getResource(path + "grassfstep.wav");
         soundURL[3] = getClass().getResource(path + "sandfstep.wav");
         soundURL[4] = getClass().getResource(path + "pickupkey.wav");
-        soundURL[5] = getClass().getResource(path + "opendoor.wav");
+        soundURL[5] = getClass().getResource(path + "opendoor.wav"); // reused for chest opening
         soundURL[6] = getClass().getResource(path + "death.wav");
         // need sfx for water 
         

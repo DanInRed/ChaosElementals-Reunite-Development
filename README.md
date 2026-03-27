@@ -4,6 +4,12 @@ A Java-based battle engine for our FINAL PROJECT
 - Tech Stack: Java(JDK25), Swing, Graphics2D, Ant and Netbeans version 28;
 
 ---
+## Credits
+- Resources used for the development of this game is located at `src.credits`
+- Credits [CREDITS](/src/credits/credits.txt)
+
+
+---
 ## Quick Start
 1. Clone the repo
 2. Open in Netbeans or vsCode
