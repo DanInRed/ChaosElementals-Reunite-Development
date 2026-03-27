@@ -48,7 +48,8 @@ public class GamePanel extends JPanel implements Runnable{
     public SuperObject obj[] = new SuperObject[10];
     
     // UI DISPLAY
-    public UI ui = new UI(this);
+    public UI uiSpecial = new UI(this);
+    public UI uiNormal = new UI(this);
     
     // Set player's default position
     int playerX = 100;
@@ -109,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable{
     // mechanic
     public void runUpdate(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
-            ui.draw(g2);
+            uiSpecial.draw(g2);
             
     }
     
@@ -132,9 +133,11 @@ public class GamePanel extends JPanel implements Runnable{
                 obj[i].draw(g2, this);
             }
         }
-        
+        // PLAYER
         player.draw(g2);
         runUpdate(g2); // mechanic
+
+        uiNormal.draw(g2);
         g2.dispose();
     }
     

@@ -124,7 +124,7 @@ public class Player extends Entity{
                     gp.playSFX(4);
                     hasKey++;
                     gp.obj[i] = null;
-                    gp.ui.showMessage("Picked up a Key! \nKey: " + hasKey);
+                    gp.uiNormal.showMessage("Picked up a Key! \nKey: " + hasKey);
                     break;
                 case "Door":
                     gp.playSFX(5);
@@ -132,7 +132,7 @@ public class Player extends Entity{
                 case "Boots":
                     gp.playSFX(4);
                     speed += 4;
-                    gp.ui.showMessage("Picked up the Speedy boots! \nSpeed increased by 100% (8px*60fps)");
+                    gp.uiNormal.showMessage("Picked up the Speedy boots! \nSpeed increased by 100% (8px*60fps)");
                     System.out.println("Speed: " + speed);
                     gp.obj[i] = null;
                     break;
@@ -142,9 +142,9 @@ public class Player extends Entity{
                         gp.obj[i].collision = false;
                         gp.obj[i] = null; // Chest dissapears when opened 
                         hasKey--;
-                        gp.ui.showMessage("Used a Key! \nRemaining Keys: " + hasKey);
+                        gp.uiNormal.showMessage("Used a Key! \nRemaining Keys: " + hasKey);
                     }else if(gp.obj[i].collision){
-                        gp.ui.showMessage("I need a key!");
+                        gp.uiNormal.showMessage("I need a key!");
                     }
                     break;
             }
