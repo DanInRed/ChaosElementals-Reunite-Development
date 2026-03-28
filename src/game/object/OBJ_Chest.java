@@ -20,5 +20,6 @@ public class OBJ_Chest extends SuperObject{
             System.out.println("Error at OBJ_Chest");
             e.printStackTrace();
         }
+        collision = true;
     }
 }

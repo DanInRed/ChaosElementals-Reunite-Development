@@ -1,4 +1,4 @@
-
+        
 /*
  *  Project: ChaosElementalsGridExperiment
  *  Author: Dash 
@@ -9,12 +9,10 @@ package game.tiles;
 import game.core.main.GamePanel;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import javax.imageio.ImageIO;
 
-public class TileManager {
+public class TileManager implements TileIDs{
     GamePanel gp;
     public Tile[] tile;
     public int mapTileNum[][];
@@ -23,67 +21,24 @@ public class TileManager {
     int spriteCounter = 0;
     int spriteNum = 1;
     
-    public TileManager(GamePanel gp){
-        final String path = "/game/resources/maps/";
+    public TileManager(GamePanel gp) {
         this.gp = gp;
-        
-        tile = new Tile[50];
+        tile = new Tile[51];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
-        
-        getTimeImage();
-        loadMap(path + "50by50map.txt");
-    }
 
-    public void getTimeImage() {
-        final String path = "/game/resources/tiles/"; 
-        try{
-            // 10 = water, 20 = sand,  00-01 = grass path, 5 = earth/field, 30 = tree, 40 = brick/wall;
-            // --- 00-09 = WALKABLE PATHS ---
-            tile[0] = new Tile(); //grass1
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream(path + "grass1.png"));
-            tile[1] = new Tile(); //grass2
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream(path + "grass2.png"));
-            
-            
-            tile[40] = new Tile();
-            tile[40].image = ImageIO.read(getClass().getResourceAsStream(path + "brick.png"));
-            tile[40].collision = true;
-            
-            // --- 10-19 = WALKABLE WATER (SHALLOW OCEAN/POND/RIVER) ---
-            tile[10] = new Tile(); //water1
-            tile[10].image = ImageIO.read(getClass().getResourceAsStream(path + "water1.png"));
-            //tile[10].collision = true;
-            tile[11] = new Tile(); //water2
-            tile[11].image = ImageIO.read(getClass().getResourceAsStream(path + "water2.png"));
-            //tile[11].collision = true;
-            
-            tile[5] = new Tile(); //earth
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream(path + "earth.png"));
-            
-            tile[30] = new Tile(); //tree
-            tile[30].image = ImageIO.read(getClass().getResourceAsStream(path + "tree.png"));
-            tile[30].collision = true;
-            
-            tile[20] = new Tile(); //sand
-            tile[20].image = ImageIO.read(getClass().getResourceAsStream(path + "sand.png"));
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        // The Loader does the heavy lifting
+        TileLoader.loadOverworldTiles(tile);
+        TileLoader.parseMapFile("/game/resources/maps/50by50map.txt", mapTileNum, gp.maxWorldCol, gp.maxWorldRow);
     }
     
-    public void update() { // animation for tiles grass and water
+    public void update() { 
         spriteCounter++;
-        // Change image every 30 frames (0.5 seconds at 60FPS)
-        if(spriteCounter > 30) {
-            if(spriteNum == 1) {
-                spriteNum = 2;
-            } else if(spriteNum == 2) {
-                spriteNum = 1;
-            }
+        if(spriteCounter > 60) {
+            spriteNum = (spriteNum == 1) ? 2 : 1; // Cleaner way to toggle
             spriteCounter = 0;
+        }
     }
-}
+
     
     public void loadMap(String filePath){
         try{
@@ -135,8 +90,12 @@ public class TileManager {
             // Animation Logic: Swap tiles based on spriteNum
             int finalTileNum = tileNum;
             
-            if(tileNum == 0 && spriteNum == 2) finalTileNum = 1; // Switch grass1 to grass2
-            if(tileNum == 10 && spriteNum == 2) finalTileNum = 11; // Switch water1 to water2
+            if(tileNum == GRASS_A && spriteNum == 2) finalTileNum = GRASS_B; // Grass Animation
+            if(tileNum == PATH_A && spriteNum == 2) finalTileNum = PATH_B; // Path Animation
+            if(tileNum == WATER_A && spriteNum == 2) finalTileNum = WATER_B; // Water animation
+            if(tileNum == TREE_A && spriteNum == 2) finalTileNum = TREE_B; // Tree animation
+            if(tileNum == BUSH1_A && spriteNum == 2) finalTileNum = BUSH1_B; // Bush animation
+            if(tileNum == BUSH2_A && spriteNum == 2) finalTileNum = BUSH2_B; // thornyBush animation
             
             // Memory efficient that draws only those tiles that falls inside the player's screen
             if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 

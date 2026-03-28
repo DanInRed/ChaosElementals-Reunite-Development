@@ -37,8 +37,8 @@ public class GamePanel extends JPanel implements Runnable{
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
-    
+    Sound music = new Sound();
+    Sound sfx = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread;
@@ -48,7 +48,8 @@ public class GamePanel extends JPanel implements Runnable{
     public SuperObject obj[] = new SuperObject[10];
     
     // UI DISPLAY
-    public UI ui = new UI(this);
+    public UI uiSpecial = new UI(this);
+    public UI uiNormal = new UI(this);
     
     // Set player's default position
     int playerX = 100;
@@ -109,8 +110,7 @@ public class GamePanel extends JPanel implements Runnable{
     // mechanic
     public void runUpdate(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
-            //TODO thread sleeper
-            ui.draw(g2);
+            uiSpecial.draw(g2);
             
     }
     
@@ -133,25 +133,27 @@ public class GamePanel extends JPanel implements Runnable{
                 obj[i].draw(g2, this);
             }
         }
-        
+        // PLAYER
         player.draw(g2);
         runUpdate(g2); // mechanic
+
+        uiNormal.draw(g2);
         g2.dispose();
     }
     
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
     
     public void stopMusic(){
-        sound.stop();
+        music.stop();
     }
     
     public void playSFX(int i){
-        sound.setFile(i);
-        sound.play();
+        sfx.setFile(i);
+        sfx.play();
     }
     
 }

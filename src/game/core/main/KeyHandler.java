@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener{
     
     public boolean upPressed, downPressed, leftPressed, rightPressed;
-    public String input = "";
     public boolean mechanics = false;
     public int creditCounter = 0;
     
@@ -31,17 +30,7 @@ public class KeyHandler implements KeyListener{
     
     @Override //dont touch or debug 10 hours
     public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        input += Character.toLowerCase(c);
-        
-        if (input.length() > 20) {
-            input = input.substring(1);
-        }
-        
-        if (input.endsWith("dev")) {
-            mechanics = !mechanics; 
-            input = "";
-        }
+        //keep this empty
     }
 
     @Override
@@ -60,6 +49,16 @@ public class KeyHandler implements KeyListener{
         if(code == KeyEvent.VK_D){
             rightPressed = true;
         }
+        
+        if (e.isControlDown() && e.isShiftDown() && code == KeyEvent.VK_D) {    
+            // Toggle the mechanic state
+            if (!mechanics) {
+                mechanics = true;
+                creditCounter = 0; // Reset timer for the 5-second show
+                System.out.println("Cheat Activated: The Revelation Begins!");
+            }
+        }
+        
     }
 
     @Override
