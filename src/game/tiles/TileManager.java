@@ -28,7 +28,7 @@ public class TileManager {
         final String path = "/game/resources/maps/";
         this.gp = gp;
         
-        tile = new Tile[50];
+        tile = new Tile[51];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         
         getTileImage();
@@ -43,10 +43,11 @@ public class TileManager {
             BufferedImage pathSheet = ImageIO.read(getClass().getResourceAsStream(path + "/path.png"));
             BufferedImage waterSheet = ImageIO.read(getClass().getResourceAsStream(path + "/water.png"));
             BufferedImage treeSheet  = ImageIO.read(getClass().getResourceAsStream(path + "/tree.png"));
-            BufferedImage bushSheet = ImageIO.read(getClass().getResourceAsStream(path + "/bush.png"));
-            BufferedImage thornybushSheet = ImageIO.read(getClass().getResourceAsStream(path + "/thornybush.png"));
+            BufferedImage bush1Sheet = ImageIO.read(getClass().getResourceAsStream(path + "/bush1.png"));
+            BufferedImage bush2Sheet = ImageIO.read(getClass().getResourceAsStream(path + "/bush2.png"));
             // 00-01 grass, 02-03 path, 04 hintpath, 05 sand,06 concretefloor, 10-11 water, 
-            // 30-31 = tree, 35-36 bush, 37-38 thorny, 40 = concretewall 
+            // 30-31 = tree, 35-36 bush, 37-38 thorny, 40 = concretewall
+            // 41 = cavewall, 50 = caveentrance
             // --- 00-09 = WALKABLE PATHS ---
             tile[0] = new Tile(); // Frame 1
             tile[0].image = grassSheet.getSubimage(0, 0, 16, 16); // Row 1
@@ -64,8 +65,8 @@ public class TileManager {
             tile[5] = new Tile(); //sand
             tile[5].image = ImageIO.read(getClass().getResourceAsStream(path + "sand.png"));
             tile[5].collision = true;
-            tile[6] = new Tile(); //concrete floor
-            tile[6].image = ImageIO.read(getClass().getResourceAsStream(path + "concretefloor.png"));
+            tile[6] = new Tile(); //cobble floor
+            tile[6].image = ImageIO.read(getClass().getResourceAsStream(path + "cobblefloor.png"));
             
             
             // --- 10-19 = WATER
@@ -84,20 +85,31 @@ public class TileManager {
             tile[31].collision = true;
             
             tile[35] = new Tile(); // Frame 1
-            tile[35].image = bushSheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[35].image = bush1Sheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[35].collision = true;
             tile[36] = new Tile(); // Frame 2
-            tile[36].image = bushSheet.getSubimage(0, 16, 16, 16); // Row 2
+            tile[36].image = bush1Sheet.getSubimage(0, 16, 16, 16); // Row 2
+            tile[36].collision = true;
             
             tile[37] = new Tile(); // Frame 1
-            tile[37].image = thornybushSheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[37].image = bush2Sheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[37].collision = true;
             tile[38] = new Tile(); // Frame 2
-            tile[38].image = thornybushSheet.getSubimage(0, 16, 16, 16); // Row 2
-            
+            tile[38].image = bush2Sheet.getSubimage(0, 16, 16, 16); // Row 2
+            tile[38].collision = true;
             
             // WALLS 40+
             tile[40] = new Tile();
             tile[40].image = ImageIO.read(getClass().getResourceAsStream(path + "concretewall.png"));
             tile[40].collision = true;
+            
+            tile[41] = new Tile();
+            tile[41].image = ImageIO.read(getClass().getResourceAsStream(path + "cavewall.png"));
+            tile[41].collision = true;
+            
+            tile[50] = new Tile();
+            tile[50].image = ImageIO.read(getClass().getResourceAsStream(path + "caveentrance.png"));
+            //teleport if player hits the tile to the cave floor1 map
             
         }catch(IOException e){
             e.printStackTrace();
