@@ -40,20 +40,33 @@ public class TileManager {
         try{
             // 1. Load the three separate strips
             BufferedImage grassSheet = ImageIO.read(getClass().getResourceAsStream(path + "/grass.png"));
+            BufferedImage pathSheet = ImageIO.read(getClass().getResourceAsStream(path + "/path.png"));
             BufferedImage waterSheet = ImageIO.read(getClass().getResourceAsStream(path + "/water.png"));
             BufferedImage treeSheet  = ImageIO.read(getClass().getResourceAsStream(path + "/tree.png"));
-            
-            // 10 = water, 20 = sand,  00-01 = grass path, 5 = earth/field, 30 = tree, 40 = brick/wall;
+            BufferedImage bushSheet = ImageIO.read(getClass().getResourceAsStream(path + "/bush.png"));
+            BufferedImage thornybushSheet = ImageIO.read(getClass().getResourceAsStream(path + "/thornybush.png"));
+            // 00-01 grass, 02-03 path, 04 hintpath, 05 sand,06 concretefloor, 10-11 water, 
+            // 30-31 = tree, 35-36 bush, 37-38 thorny, 40 = concretewall 
             // --- 00-09 = WALKABLE PATHS ---
             tile[0] = new Tile(); // Frame 1
             tile[0].image = grassSheet.getSubimage(0, 0, 16, 16); // Row 1
             tile[1] = new Tile(); // Frame 2
             tile[1].image = grassSheet.getSubimage(0, 16, 16, 16); // Row 2
             
+            tile[2] = new Tile(); // Frame 1
+            tile[2].image = pathSheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[3] = new Tile(); // Frame 2
+            tile[3].image = pathSheet.getSubimage(0, 16, 16, 16); // Row 2
             
-            tile[40] = new Tile();
-            tile[40].image = ImageIO.read(getClass().getResourceAsStream(path + "brick.png"));
-            tile[40].collision = true;
+            tile[4] = new Tile(); // hint path
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream(path + "hintpath.png"));
+            
+            tile[5] = new Tile(); //sand
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream(path + "sand.png"));
+            tile[5].collision = true;
+            tile[6] = new Tile(); //concrete floor
+            tile[6].image = ImageIO.read(getClass().getResourceAsStream(path + "concretefloor.png"));
+            
             
             // --- 10-19 = WATER
             tile[10] = new Tile();
@@ -63,9 +76,6 @@ public class TileManager {
             tile[11].image = waterSheet.getSubimage(0, 16, 16, 16);
             tile[11].collision = true;
             
-            tile[5] = new Tile(); //earth
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream(path + "earth.png"));
-            
             tile[30] = new Tile();
             tile[30].image = treeSheet.getSubimage(0, 0, 16, 16);
             tile[30].collision = true;
@@ -73,9 +83,21 @@ public class TileManager {
             tile[31].image = treeSheet.getSubimage(0, 16, 16, 16);
             tile[31].collision = true;
             
+            tile[35] = new Tile(); // Frame 1
+            tile[35].image = bushSheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[36] = new Tile(); // Frame 2
+            tile[36].image = bushSheet.getSubimage(0, 16, 16, 16); // Row 2
             
-            tile[20] = new Tile(); //sand
-            tile[20].image = ImageIO.read(getClass().getResourceAsStream(path + "sand.png"));
+            tile[37] = new Tile(); // Frame 1
+            tile[37].image = thornybushSheet.getSubimage(0, 0, 16, 16); // Row 1
+            tile[38] = new Tile(); // Frame 2
+            tile[38].image = thornybushSheet.getSubimage(0, 16, 16, 16); // Row 2
+            
+            
+            // WALLS 40+
+            tile[40] = new Tile();
+            tile[40].image = ImageIO.read(getClass().getResourceAsStream(path + "concretewall.png"));
+            tile[40].collision = true;
             
         }catch(IOException e){
             e.printStackTrace();
@@ -84,7 +106,7 @@ public class TileManager {
     
     public void update() { 
         spriteCounter++;
-        if(spriteCounter > 30) {
+        if(spriteCounter > 60) {
             spriteNum = (spriteNum == 1) ? 2 : 1; // Cleaner way to toggle
             spriteCounter = 0;
         }
@@ -142,8 +164,11 @@ public class TileManager {
             int finalTileNum = tileNum;
             
             if(tileNum == 0 && spriteNum == 2) finalTileNum = 1; // Grass Animation
+            if(tileNum == 2 && spriteNum == 2) finalTileNum = 3; // Path Animation
             if(tileNum == 10 && spriteNum == 2) finalTileNum = 11; // Water animation
             if(tileNum == 30 && spriteNum == 2) finalTileNum = 31; // Tree animation
+            if(tileNum == 35 && spriteNum == 2) finalTileNum = 36; // Bush animation
+            if(tileNum == 37 && spriteNum == 2) finalTileNum = 38; // thornyBush animation
             
             // Memory efficient that draws only those tiles that falls inside the player's screen
             if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
